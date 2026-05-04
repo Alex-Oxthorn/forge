@@ -1,0 +1,34 @@
+@use './core' as *;
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-breadcrumb {
+  @include tokens;
+  @include base;
+}
+
+.separator {
+  @include separator;
+}
+
+.home-button {
+  @include home-button;
+}
+
+.collapsed-trigger {
+  @include collapsed-trigger;
+}
+
+.crumb-item {
+  @include crumb-item;
+}
+
+[hidden] {
+  display: none;
+}

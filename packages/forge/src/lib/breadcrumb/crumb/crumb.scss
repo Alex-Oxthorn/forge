@@ -1,0 +1,46 @@
+@use './core' as *;
+
+:host {
+  @include host;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.forge-crumb {
+  @include tokens;
+  @include base;
+}
+
+.link {
+  @include link;
+}
+
+.label-text {
+  @include label-text;
+}
+
+.secondary-text {
+  @include secondary-text;
+}
+
+.crumb-icon {
+  @include crumb-icon;
+}
+
+.sibling-trigger {
+  @include sibling-trigger;
+}
+
+.active {
+  @include active;
+}
+
+.separator {
+  @include separator;
+}
+
+[hidden] {
+  display: none;
+}

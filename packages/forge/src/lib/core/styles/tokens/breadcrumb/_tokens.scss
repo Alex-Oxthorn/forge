@@ -1,0 +1,13 @@
+@use 'sass:map';
+@use '../../spacing';
+@use '../../theme';
+@use '../../utils';
+
+$tokens: (
+  gap: utils.module-val(breadcrumb, gap, 0px),
+  separator-theme: utils.module-val(breadcrumb, separator-theme, theme.variable(text-low))
+) !default;
+
+@function get($key) {
+  @return map.get($tokens, $key);
+}

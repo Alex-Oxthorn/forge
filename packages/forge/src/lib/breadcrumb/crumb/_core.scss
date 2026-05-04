@@ -1,0 +1,81 @@
+@use './token-utils' as *;
+@use '../breadcrumb/_token-utils' as breadcrumb-tokens;
+@use '../../icon' as icon;
+@use '../../icon-button' as icon-button;
+
+@forward './token-utils';
+
+@mixin host {
+  display: inline-flex;
+  align-items: center;
+}
+
+@mixin base {
+  display: flex;
+  align-items: flex-start;
+}
+
+@mixin link {
+  color: #{token(text-color)};
+  text-decoration: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font: inherit;
+  border: none;
+  background: none;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
+  align-items: flex-start;
+
+  &:focus-visible {
+    outline: 2px solid #{token(text-color)};
+    outline-offset: 2px;
+  }
+}
+
+@mixin label-text {
+  white-space: nowrap;
+  grid-column-start: 2;
+  grid-row-start: 1;
+  align-self: center;
+}
+
+@mixin secondary-text {
+  font-size: 0.75rem;
+  color: #{token(secondary-text-color)};
+  grid-column-start: 2;
+  grid-row-start: 2;
+  text-align: left;
+}
+
+@mixin crumb-icon {
+  color: #{token(icon-theme)};
+  margin-right: 8px;
+}
+
+@mixin sibling-trigger {
+  @include icon-button.provide-theme(
+    (
+      size: 32px
+    )
+  );
+}
+
+@mixin active {
+  color: inherit;
+  cursor: default;
+  padding: 4px 8px;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+@mixin separator {
+  color: #{breadcrumb-tokens.token(separator-theme)};
+  padding-top: 4px;
+}
