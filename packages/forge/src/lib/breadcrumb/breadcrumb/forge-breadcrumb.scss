@@ -20,8 +20,4 @@
   &__crumb-item {
     @include core.crumb-item;
   }
-
-  &__last-crumb {
-    @include core.last-crumb;
-  }
 }
