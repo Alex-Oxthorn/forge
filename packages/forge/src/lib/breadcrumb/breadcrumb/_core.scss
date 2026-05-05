@@ -36,6 +36,7 @@
 @mixin collapsed-trigger {
   @include icon-button.provide-theme(
     (
+      icon-color: theme.variable(primary),
       size: 32px
     )
   );
