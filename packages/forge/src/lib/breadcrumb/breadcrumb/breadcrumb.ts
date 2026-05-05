@@ -200,7 +200,7 @@ export class BreadcrumbComponent extends BaseLitElement implements IBreadcrumbCo
       this.#containerWidth = entries[0].contentRect.width;
       this.#checkCollapse();
     });
-    this.#containerObserver.observe(this._listEl);
+    this.#containerObserver.observe(this);
   }
 
   #checkCollapse(): void {
