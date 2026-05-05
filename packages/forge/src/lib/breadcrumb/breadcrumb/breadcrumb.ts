@@ -36,6 +36,8 @@ export interface IBreadcrumbComponent {
  * hierarchical structure. It supports icons, secondary text, sibling route navigation, and
  * automatically collapses into a menu when the container width is insufficient.
  *
+ * @csspart root - The root navigation element.
+ *
  * @cssproperty --forge-breadcrumb-gap - The gap between breadcrumb items.
  * @cssproperty --forge-breadcrumb-separator-theme - The color theme for separator icons.
  *
@@ -134,8 +136,8 @@ export class BreadcrumbComponent extends BaseLitElement implements IBreadcrumbCo
       return nothing;
     }
     return html`
-      <li class="crumb-item">
-        <forge-icon-button class="home-button" aria-label="Home" @click=${this.#handleHomeClick}>
+      <li class="forge-breadcrumb__crumb-item">
+        <forge-icon-button class="forge-breadcrumb__home-button" aria-label="Home" @click=${this.#handleHomeClick}>
           <forge-icon name="home"></forge-icon>
         </forge-icon-button>
         ${this.#renderSeparator()}
@@ -144,14 +146,14 @@ export class BreadcrumbComponent extends BaseLitElement implements IBreadcrumbCo
   }
 
   #renderSeparator(): TemplateResult {
-    return html`<forge-icon class="separator" .name=${this.separator}></forge-icon>`;
+    return html`<forge-icon class="forge-breadcrumb__separator" .name=${this.separator}></forge-icon>`;
   }
 
   #renderExpanded(): TemplateResult[] {
     return this.crumbs.map((crumb, index) => {
       const isLast = index === this.crumbs.length - 1;
       return html`
-        <li class="crumb-item">
+        <li class="forge-breadcrumb__crumb-item">
           <forge-crumb .crumb=${crumb} .index=${index} ?active=${isLast} .separator=${!isLast ? this.separator : ''}> </forge-crumb>
         </li>
       `;
@@ -171,9 +173,9 @@ export class BreadcrumbComponent extends BaseLitElement implements IBreadcrumbCo
     }));
 
     return html`
-      <li class="crumb-item">
+      <li class="forge-breadcrumb__crumb-item">
         <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleCollapsedMenuSelect}>
-          <forge-icon-button class="collapsed-trigger" aria-label="Show all breadcrumbs">
+          <forge-icon-button class="forge-breadcrumb__collapsed-trigger" aria-label="Show all breadcrumbs">
             <forge-icon name="dots_horizontal"></forge-icon>
           </forge-icon-button>
         </forge-menu>
@@ -181,7 +183,7 @@ export class BreadcrumbComponent extends BaseLitElement implements IBreadcrumbCo
       </li>
       ${lastCrumb
         ? html`
-            <li class="crumb-item">
+            <li class="forge-breadcrumb__crumb-item">
               <forge-crumb .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active> </forge-crumb>
             </li>
           `
@@ -190,8 +192,7 @@ export class BreadcrumbComponent extends BaseLitElement implements IBreadcrumbCo
   }
 
   #setupResizeObserver(): void {
-    const root = this.shadowRoot?.querySelector('.forge-breadcrumb');
-    if (!root) {
+    if (!this._listEl) {
       return;
     }
 
@@ -199,7 +200,7 @@ export class BreadcrumbComponent extends BaseLitElement implements IBreadcrumbCo
       this.#containerWidth = entries[0].contentRect.width;
       this.#checkCollapse();
     });
-    this.#containerObserver.observe(root);
+    this.#containerObserver.observe(this._listEl);
   }
 
   #checkCollapse(): void {

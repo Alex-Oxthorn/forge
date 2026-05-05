@@ -113,3 +113,14 @@ export const RichCrumbs: Story = {
     return el;
   }
 };
+
+export const CustomSeparator: Story = {
+  ...standaloneStoryParams,
+  render: () => html`
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <forge-breadcrumb .crumbs=${basicCrumbs} separator="slash_forward"></forge-breadcrumb>
+      <forge-breadcrumb .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumb>
+      <forge-breadcrumb .crumbs=${basicCrumbs} separator="arrow_right"></forge-breadcrumb>
+    </div>
+  `
+};

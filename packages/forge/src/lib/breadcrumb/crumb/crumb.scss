@@ -1,4 +1,6 @@
 @use './core' as *;
+@use '../../state-layer';
+@use '../../focus-indicator';
 
 :host {
   @include host;
@@ -13,31 +15,48 @@
   @include base;
 }
 
-.link {
+.forge-crumb__link {
   @include link;
+
+  forge-state-layer {
+    @include state-layer.provide-theme(
+      (
+        color: #{token(text-color)}
+      )
+    );
+  }
 }
 
-.label-text {
+forge-focus-indicator {
+  @include focus-indicator.provide-theme(
+    (
+      color: #{token(text-color)},
+      shape: 4px
+    )
+  );
+}
+
+.forge-crumb__label-text {
   @include label-text;
 }
 
-.secondary-text {
+.forge-crumb__secondary-text {
   @include secondary-text;
 }
 
-.crumb-icon {
+.forge-crumb__icon {
   @include crumb-icon;
 }
 
-.sibling-trigger {
+.forge-crumb__sibling-trigger {
   @include sibling-trigger;
 }
 
-.active {
+.forge-crumb__active {
   @include active;
 }
 
-.separator {
+.forge-crumb__separator {
   @include separator;
 }
 

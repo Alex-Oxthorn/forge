@@ -25,7 +25,7 @@
     @include core.sibling-trigger;
   }
 
-  &--active {
+  &__active {
     @include core.active;
   }
 }

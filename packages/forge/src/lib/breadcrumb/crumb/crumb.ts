@@ -5,6 +5,7 @@ import { BaseLitElement } from '../../core/base/base-lit-element.js';
 import { IconRegistry } from '../../icon/index.js';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 
+import '../../focus-indicator/focus-indicator.js';
 import '../../icon/icon.js';
 import '../../icon-button/icon-button.js';
 import '../../menu/menu.js';
@@ -19,6 +20,8 @@ import styles from './crumb.scss';
 export interface ICrumbComponent {
   crumb: ICrumbConfiguration;
   active: boolean;
+  index: number;
+  separator: string;
 }
 
 /**
@@ -55,18 +58,19 @@ export class CrumbComponent extends BaseLitElement implements ICrumbComponent {
   #renderContent(): TemplateResult {
     if (this.active || !this.crumb.path) {
       return html`
-        <span class="active" aria-current=${this.active ? 'page' : nothing}>
-          <span class="label-text">${this.crumb.label}</span>
+        <span class="forge-crumb__active" aria-current=${this.active ? 'page' : nothing}>
+          <span class="forge-crumb__label-text">${this.crumb.label}</span>
         </span>
       `;
     }
 
     return html`
-      <button class="link" type="button" @click=${this.#handleClick}>
+      <button class="forge-crumb__link" type="button" @click=${this.#handleClick}>
         <forge-state-layer></forge-state-layer>
-        ${this.crumb.icon ? html`<forge-icon class="crumb-icon" .name=${this.crumb.icon}></forge-icon>` : nothing}
-        <span class="label-text">${this.crumb.label}</span>
-        ${this.crumb.secondary ? html`<span class="secondary-text">${this.crumb.secondary}</span>` : nothing}
+        <forge-focus-indicator></forge-focus-indicator>
+        ${this.crumb.icon ? html`<forge-icon class="forge-crumb__icon" .name=${this.crumb.icon}></forge-icon>` : nothing}
+        <span class="forge-crumb__label-text">${this.crumb.label}</span>
+        ${this.crumb.secondary ? html`<span class="forge-crumb__secondary-text">${this.crumb.secondary}</span>` : nothing}
       </button>
     `;
   }
@@ -75,7 +79,7 @@ export class CrumbComponent extends BaseLitElement implements ICrumbComponent {
     if (!this.separator || this.active) {
       return nothing;
     }
-    return html`<forge-icon class="separator" .name=${this.separator}></forge-icon>`;
+    return html`<forge-icon class="forge-crumb__separator" .name=${this.separator}></forge-icon>`;
   }
 
   #renderSiblingTrigger(): TemplateResult | typeof nothing {
@@ -93,7 +97,7 @@ export class CrumbComponent extends BaseLitElement implements ICrumbComponent {
 
     return html`
       <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleSiblingSelect} dense>
-        <forge-icon-button class="sibling-trigger" aria-label="Sibling routes">
+        <forge-icon-button class="forge-crumb__sibling-trigger" aria-label="Sibling routes">
           <forge-icon name="arrow_drop_down"></forge-icon>
         </forge-icon-button>
       </forge-menu>
