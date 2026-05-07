@@ -1,10 +1,10 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
-import { BreadcrumbsComponent } from './breadcrumb/breadcrumb.js';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.js';
 import { CrumbComponent } from './crumb/crumb.js';
 
-export * from './breadcrumb/breadcrumb.js';
-export * from './breadcrumb/breadcrumb-constants.js';
+export * from './breadcrumbs/breadcrumbs.js';
+export * from './breadcrumbs/breadcrumbs-constants.js';
 export * from './crumb/crumb.js';
 export * from './crumb/crumb-constants.js';
 

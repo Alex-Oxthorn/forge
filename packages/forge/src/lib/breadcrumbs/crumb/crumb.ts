@@ -11,7 +11,7 @@ import '../../icon-button/icon-button.js';
 import '../../menu/menu.js';
 import '../../state-layer/state-layer.js';
 
-import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS } from '../breadcrumb/breadcrumb-constants.js';
+import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS } from '../breadcrumbs/breadcrumbs-constants.js';
 import { CRUMB_TAG_NAME } from './crumb-constants.js';
 import type { IMenuOption } from '../../menu/menu-constants.js';
 

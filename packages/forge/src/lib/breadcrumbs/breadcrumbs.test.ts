@@ -2,11 +2,11 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 
-import type { BreadcrumbsComponent } from './breadcrumb/breadcrumb.js';
-import type { ICrumbConfiguration, IBreadcrumbsSelectEventData } from './breadcrumb/breadcrumb-constants.js';
+import type { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.js';
+import type { ICrumbConfiguration, IBreadcrumbsSelectEventData } from './breadcrumbs/breadcrumbs-constants.js';
 import { frame } from '../core/utils/utils.js';
 
-import './breadcrumb/breadcrumb.js';
+import './breadcrumbs/breadcrumbs.js';
 import './crumb/crumb.js';
 
 const basicCrumbs: ICrumbConfiguration[] = [{ label: 'Home', path: '/' }, { label: 'Projects', path: '/projects' }, { label: 'Components' }];

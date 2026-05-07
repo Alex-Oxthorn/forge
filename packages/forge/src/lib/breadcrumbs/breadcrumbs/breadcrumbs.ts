@@ -14,11 +14,11 @@ import '../../icon-button/icon-button.js';
 import '../../menu/menu.js';
 import '../crumb/crumb.js';
 
-import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS, BREADCRUMBS_TAG_NAME } from './breadcrumb-constants.js';
+import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS, BREADCRUMBS_TAG_NAME } from './breadcrumbs-constants.js';
 import { CrumbComponent } from '../crumb/crumb.js';
 import type { IMenuOption } from '../../menu/menu-constants.js';
 
-import styles from './breadcrumb.scss';
+import styles from './breadcrumbs.scss';
 
 /**
  * @tag forge-breadcrumbs
