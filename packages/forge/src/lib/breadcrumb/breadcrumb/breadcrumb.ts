@@ -20,12 +20,6 @@ import type { IMenuOption } from '../../menu/menu-constants.js';
 
 import styles from './breadcrumb.scss';
 
-export interface IBreadcrumbComponent {
-  crumbs: ICrumbConfiguration[];
-  showHome: boolean;
-  separator: string;
-}
-
 /**
  * @tag forge-breadcrumb
  *
@@ -45,7 +39,7 @@ export interface IBreadcrumbComponent {
  * @fires {CustomEvent<void>} forge-breadcrumb-home-click - Dispatched when the home button is clicked.
  */
 @customElement(BREADCRUMB_TAG_NAME)
-export class BreadcrumbComponent extends BaseLitElement implements IBreadcrumbComponent {
+export class BreadcrumbComponent extends BaseLitElement {
   static {
     IconRegistry.define([tylIconSlashForward, tylIconDotsHorizontal, tylIconHome]);
   }

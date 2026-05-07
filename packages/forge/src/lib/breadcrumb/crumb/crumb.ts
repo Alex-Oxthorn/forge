@@ -17,19 +17,12 @@ import type { IMenuOption } from '../../menu/menu-constants.js';
 
 import styles from './crumb.scss';
 
-export interface ICrumbComponent {
-  crumb: ICrumbConfiguration;
-  active: boolean;
-  index: number;
-  separator: string;
-}
-
 /**
  * @tag forge-crumb
  * @summary An individual crumb item within a breadcrumb navigation.
  */
 @customElement(CRUMB_TAG_NAME)
-export class CrumbComponent extends BaseLitElement implements ICrumbComponent {
+export class CrumbComponent extends BaseLitElement {
   static {
     IconRegistry.define([tylIconArrowDropDown]);
   }
