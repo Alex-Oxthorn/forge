@@ -14,14 +14,14 @@ import '../../icon-button/icon-button.js';
 import '../../menu/menu.js';
 import '../crumb/crumb.js';
 
-import { ICrumbConfiguration, IBreadcrumbSelectEventData, BREADCRUMB_CONSTANTS, BREADCRUMB_TAG_NAME } from './breadcrumb-constants.js';
+import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS, BREADCRUMBS_TAG_NAME } from './breadcrumb-constants.js';
 import { CrumbComponent } from '../crumb/crumb.js';
 import type { IMenuOption } from '../../menu/menu-constants.js';
 
 import styles from './breadcrumb.scss';
 
 /**
- * @tag forge-breadcrumb
+ * @tag forge-breadcrumbs
  *
  * @summary A responsive breadcrumb navigation component that automatically collapses when space is limited.
  *
@@ -32,14 +32,14 @@ import styles from './breadcrumb.scss';
  *
  * @csspart root - The root navigation element.
  *
- * @cssproperty --forge-breadcrumb-gap - The gap between breadcrumb items.
- * @cssproperty --forge-breadcrumb-separator-theme - The color theme for separator icons.
+ * @cssproperty --forge-breadcrumbs-gap - The gap between breadcrumb items.
+ * @cssproperty --forge-breadcrumbs-separator-theme - The color theme for separator icons.
  *
- * @fires {CustomEvent<IBreadcrumbSelectEventData>} forge-breadcrumb-crumb-select - Dispatched when a crumb is clicked.
- * @fires {CustomEvent<void>} forge-breadcrumb-home-click - Dispatched when the home button is clicked.
+ * @fires {CustomEvent<IBreadcrumbsSelectEventData>} forge-breadcrumbs-crumb-select - Dispatched when a crumb is clicked.
+ * @fires {CustomEvent<void>} forge-breadcrumbs-home-click - Dispatched when the home button is clicked.
  */
-@customElement(BREADCRUMB_TAG_NAME)
-export class BreadcrumbComponent extends BaseLitElement {
+@customElement(BREADCRUMBS_TAG_NAME)
+export class BreadcrumbsComponent extends BaseLitElement {
   static {
     IconRegistry.define([tylIconSlashForward, tylIconDotsHorizontal, tylIconHome]);
   }
@@ -47,7 +47,7 @@ export class BreadcrumbComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BREADCRUMB_TAG_NAME;
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BREADCRUMBS_TAG_NAME;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
   public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [CrumbComponent, IconButtonComponent, IconComponent, MenuComponent];
@@ -81,7 +81,7 @@ export class BreadcrumbComponent extends BaseLitElement {
   @state()
   private _expandedContentWidth = 0;
 
-  @query('.forge-breadcrumb')
+  @query('.forge-breadcrumbs')
   private _listEl?: HTMLElement;
 
   #internals: ElementInternals;
@@ -94,7 +94,7 @@ export class BreadcrumbComponent extends BaseLitElement {
   }
 
   public override firstUpdated(): void {
-    setDefaultAria(this, this.#internals, { role: 'navigation', ariaLabel: 'Breadcrumb' });
+    setDefaultAria(this, this.#internals, { role: 'navigation', ariaLabel: 'Breadcrumbs' });
     this.#setupResizeObserver();
   }
 
@@ -118,7 +118,7 @@ export class BreadcrumbComponent extends BaseLitElement {
   public render(): TemplateResult {
     return html`
       <nav part="root">
-        <ol class="forge-breadcrumb">
+        <ol class="forge-breadcrumbs">
           ${this.#renderHomeButton()} ${this._collapsed ? this.#renderCollapsed() : this.#renderExpanded()}
         </ol>
       </nav>
@@ -130,8 +130,8 @@ export class BreadcrumbComponent extends BaseLitElement {
       return nothing;
     }
     return html`
-      <li class="forge-breadcrumb__crumb-item">
-        <forge-icon-button class="forge-breadcrumb__home-button" aria-label="Home" @click=${this.#handleHomeClick}>
+      <li class="forge-breadcrumbs__crumb-item">
+        <forge-icon-button class="forge-breadcrumbs__home-button" aria-label="Home" @click=${this.#handleHomeClick}>
           <forge-icon name="home"></forge-icon>
         </forge-icon-button>
         ${this.#renderSeparator()}
@@ -140,14 +140,14 @@ export class BreadcrumbComponent extends BaseLitElement {
   }
 
   #renderSeparator(): TemplateResult {
-    return html`<forge-icon class="forge-breadcrumb__separator" .name=${this.separator}></forge-icon>`;
+    return html`<forge-icon class="forge-breadcrumbs__separator" .name=${this.separator}></forge-icon>`;
   }
 
   #renderExpanded(): TemplateResult[] {
     return this.crumbs.map((crumb, index) => {
       const isLast = index === this.crumbs.length - 1;
       return html`
-        <li class="forge-breadcrumb__crumb-item">
+        <li class="forge-breadcrumbs__crumb-item">
           <forge-crumb .crumb=${crumb} .index=${index} ?active=${isLast} .separator=${!isLast ? this.separator : ''}> </forge-crumb>
         </li>
       `;
@@ -167,9 +167,9 @@ export class BreadcrumbComponent extends BaseLitElement {
     }));
 
     return html`
-      <li class="forge-breadcrumb__crumb-item">
+      <li class="forge-breadcrumbs__crumb-item">
         <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleCollapsedMenuSelect}>
-          <forge-icon-button class="forge-breadcrumb__collapsed-trigger" aria-label="Show all breadcrumbs">
+          <forge-icon-button class="forge-breadcrumbs__collapsed-trigger" aria-label="Show all breadcrumbs">
             <forge-icon name="dots_horizontal"></forge-icon>
           </forge-icon-button>
         </forge-menu>
@@ -177,7 +177,7 @@ export class BreadcrumbComponent extends BaseLitElement {
       </li>
       ${lastCrumb
         ? html`
-            <li class="forge-breadcrumb__crumb-item">
+            <li class="forge-breadcrumbs__crumb-item">
               <forge-crumb .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active> </forge-crumb>
             </li>
           `
@@ -209,7 +209,7 @@ export class BreadcrumbComponent extends BaseLitElement {
 
   #handleHomeClick(): void {
     this.dispatchEvent(
-      new CustomEvent<void>(BREADCRUMB_CONSTANTS.events.HOME_CLICK, {
+      new CustomEvent<void>(BREADCRUMBS_CONSTANTS.events.HOME_CLICK, {
         bubbles: true,
         composed: true
       })
@@ -221,7 +221,7 @@ export class BreadcrumbComponent extends BaseLitElement {
     if (typeof index === 'number' && index >= 0 && index < this.crumbs.length) {
       const crumb = this.crumbs[index];
       this.dispatchEvent(
-        new CustomEvent<IBreadcrumbSelectEventData>(BREADCRUMB_CONSTANTS.events.CRUMB_SELECT, {
+        new CustomEvent<IBreadcrumbsSelectEventData>(BREADCRUMBS_CONSTANTS.events.CRUMB_SELECT, {
           bubbles: true,
           composed: true,
           detail: { crumb, index }
@@ -233,6 +233,6 @@ export class BreadcrumbComponent extends BaseLitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-breadcrumb': BreadcrumbComponent;
+    'forge-breadcrumbs': BreadcrumbsComponent;
   }
 }

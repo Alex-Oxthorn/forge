@@ -11,7 +11,7 @@ import '../../icon-button/icon-button.js';
 import '../../menu/menu.js';
 import '../../state-layer/state-layer.js';
 
-import { ICrumbConfiguration, IBreadcrumbSelectEventData, BREADCRUMB_CONSTANTS } from '../breadcrumb/breadcrumb-constants.js';
+import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS } from '../breadcrumb/breadcrumb-constants.js';
 import { CRUMB_TAG_NAME } from './crumb-constants.js';
 import type { IMenuOption } from '../../menu/menu-constants.js';
 
@@ -99,7 +99,7 @@ export class CrumbComponent extends BaseLitElement {
 
   #handleClick(): void {
     this.dispatchEvent(
-      new CustomEvent<IBreadcrumbSelectEventData>(BREADCRUMB_CONSTANTS.events.CRUMB_SELECT, {
+      new CustomEvent<IBreadcrumbsSelectEventData>(BREADCRUMBS_CONSTANTS.events.CRUMB_SELECT, {
         bubbles: true,
         composed: true,
         detail: { crumb: this.crumb, index: this.index }
@@ -113,7 +113,7 @@ export class CrumbComponent extends BaseLitElement {
       const siblingCrumb = this.crumb.siblingRoutes?.find(r => (r.path ?? r.label) === value);
       if (siblingCrumb) {
         this.dispatchEvent(
-          new CustomEvent<IBreadcrumbSelectEventData>(BREADCRUMB_CONSTANTS.events.CRUMB_SELECT, {
+          new CustomEvent<IBreadcrumbsSelectEventData>(BREADCRUMBS_CONSTANTS.events.CRUMB_SELECT, {
             bubbles: true,
             composed: true,
             detail: { crumb: siblingCrumb, index: this.index }

@@ -8,24 +8,24 @@
   display: none;
 }
 
-.forge-breadcrumb {
+.forge-breadcrumbs {
   @include tokens;
   @include base;
 }
 
-.forge-breadcrumb__separator {
+.forge-breadcrumbs__separator {
   @include separator;
 }
 
-.forge-breadcrumb__home-button {
+.forge-breadcrumbs__home-button {
   @include home-button;
 }
 
-.forge-breadcrumb__collapsed-trigger {
+.forge-breadcrumbs__collapsed-trigger {
   @include collapsed-trigger;
 }
 
-.forge-breadcrumb__crumb-item {
+.forge-breadcrumbs__crumb-item {
   @include crumb-item;
 }
 

@@ -1,6 +1,6 @@
 import { COMPONENT_NAME_PREFIX } from '../../constants.js';
 
-export const BREADCRUMB_TAG_NAME: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}breadcrumb`;
+export const BREADCRUMBS_TAG_NAME: keyof HTMLElementTagNameMap = `${COMPONENT_NAME_PREFIX}breadcrumbs`;
 
 export interface ICrumbConfiguration {
   label: string;
@@ -10,21 +10,21 @@ export interface ICrumbConfiguration {
   siblingRoutes?: ICrumbConfiguration[];
 }
 
-export interface IBreadcrumbSelectEventData {
+export interface IBreadcrumbsSelectEventData {
   crumb: ICrumbConfiguration;
   index: number;
 }
 
-export const BREADCRUMB_CONSTANTS = {
+export const BREADCRUMBS_CONSTANTS = {
   events: {
-    CRUMB_SELECT: 'forge-breadcrumb-crumb-select',
-    HOME_CLICK: 'forge-breadcrumb-home-click'
+    CRUMB_SELECT: 'forge-breadcrumbs-crumb-select',
+    HOME_CLICK: 'forge-breadcrumbs-home-click'
   }
 };
 
 declare global {
   interface HTMLElementEventMap {
-    'forge-breadcrumb-crumb-select': CustomEvent<IBreadcrumbSelectEventData>;
-    'forge-breadcrumb-home-click': CustomEvent<void>;
+    'forge-breadcrumbs-crumb-select': CustomEvent<IBreadcrumbsSelectEventData>;
+    'forge-breadcrumbs-home-click': CustomEvent<void>;
   }
 }

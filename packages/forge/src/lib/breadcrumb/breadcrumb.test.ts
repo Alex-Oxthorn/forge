@@ -2,8 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 
-import type { BreadcrumbComponent } from './breadcrumb/breadcrumb.js';
-import type { ICrumbConfiguration, IBreadcrumbSelectEventData } from './breadcrumb/breadcrumb-constants.js';
+import type { BreadcrumbsComponent } from './breadcrumb/breadcrumb.js';
+import type { ICrumbConfiguration, IBreadcrumbsSelectEventData } from './breadcrumb/breadcrumb-constants.js';
 import { frame } from '../core/utils/utils.js';
 
 import './breadcrumb/breadcrumb.js';
@@ -13,23 +13,23 @@ const basicCrumbs: ICrumbConfiguration[] = [{ label: 'Home', path: '/' }, { labe
 
 describe('Breadcrumb', () => {
   it('should contain a shadow root', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
 
     expect(el.shadowRoot).not.toBeNull();
   });
 
   it('should be accessible', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     await expect(el).toBeAccessible();
   });
 
   it('should render the correct number of crumbs from crumbs property', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const crumbEls = el.shadowRoot!.querySelectorAll('forge-crumb');
@@ -37,8 +37,8 @@ describe('Breadcrumb', () => {
   });
 
   it('should set aria-current="page" on the last crumb', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const crumbEls = el.shadowRoot!.querySelectorAll('forge-crumb');
@@ -49,44 +49,44 @@ describe('Breadcrumb', () => {
   });
 
   it('should render home button when show-home is set', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs} show-home></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumb__home-button');
+    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button');
     expect(homeButton).not.toBeNull();
   });
 
   it('should not render home button when show-home is unset', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumb__home-button');
+    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button');
     expect(homeButton).toBeNull();
   });
 
-  it('should emit forge-breadcrumb-home-click when home button is clicked', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs} show-home></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+  it('should emit forge-breadcrumbs-home-click when home button is clicked', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const spy = vi.fn();
-    el.addEventListener('forge-breadcrumb-home-click', spy);
+    el.addEventListener('forge-breadcrumbs-home-click', spy);
 
-    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumb__home-button') as HTMLElement;
+    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button') as HTMLElement;
     homeButton.click();
 
     expect(spy).toHaveBeenCalledOnce();
   });
 
-  it('should emit forge-breadcrumb-crumb-select with correct crumb and index when a crumb is clicked', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+  it('should emit forge-breadcrumbs-crumb-select with correct crumb and index when a crumb is clicked', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const spy = vi.fn();
-    el.addEventListener('forge-breadcrumb-crumb-select', spy);
+    el.addEventListener('forge-breadcrumbs-crumb-select', spy);
 
     const crumbEls = el.shadowRoot!.querySelectorAll('forge-crumb');
     const firstCrumb = crumbEls[0];
@@ -95,14 +95,14 @@ describe('Breadcrumb', () => {
     link.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    const detail = spy.mock.calls[0][0].detail as IBreadcrumbSelectEventData;
+    const detail = spy.mock.calls[0][0].detail as IBreadcrumbsSelectEventData;
     expect(detail.crumb).toEqual(basicCrumbs[0]);
     expect(detail.index).toBe(0);
   });
 
   it('should render a custom separator icon when separator property is set', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const crumbEls = el.shadowRoot!.querySelectorAll('forge-crumb');
@@ -119,8 +119,8 @@ describe('Breadcrumb', () => {
 
   it('should render a crumb icon when ICrumbConfiguration.icon is set', async () => {
     const crumbsWithIcon: ICrumbConfiguration[] = [{ label: 'Home', path: '/', icon: 'home' }, { label: 'End' }];
-    const screen = render(html`<forge-breadcrumb .crumbs=${crumbsWithIcon}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${crumbsWithIcon}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
@@ -131,8 +131,8 @@ describe('Breadcrumb', () => {
 
   it('should render secondary text when ICrumbConfiguration.secondary is set', async () => {
     const crumbsWithSecondary: ICrumbConfiguration[] = [{ label: 'Home', path: '/', secondary: 'Main page' }, { label: 'End' }];
-    const screen = render(html`<forge-breadcrumb .crumbs=${crumbsWithSecondary}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${crumbsWithSecondary}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
@@ -154,8 +154,8 @@ describe('Breadcrumb', () => {
       },
       { label: 'End' }
     ];
-    const screen = render(html`<forge-breadcrumb .crumbs=${crumbsWithSiblings}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${crumbsWithSiblings}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
@@ -165,8 +165,8 @@ describe('Breadcrumb', () => {
   });
 
   it('should not render a sibling routes trigger when siblingRoutes is absent', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
@@ -175,7 +175,7 @@ describe('Breadcrumb', () => {
     expect(siblingTrigger).toBeNull();
   });
 
-  it('should emit forge-breadcrumb-crumb-select with the sibling crumb when a sibling route is selected', async () => {
+  it('should emit forge-breadcrumbs-crumb-select with the sibling crumb when a sibling route is selected', async () => {
     const crumbsWithSiblings: ICrumbConfiguration[] = [
       {
         label: 'Projects',
@@ -187,12 +187,12 @@ describe('Breadcrumb', () => {
       },
       { label: 'End' }
     ];
-    const screen = render(html`<forge-breadcrumb .crumbs=${crumbsWithSiblings}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${crumbsWithSiblings}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
     const spy = vi.fn();
-    el.addEventListener('forge-breadcrumb-crumb-select', spy);
+    el.addEventListener('forge-breadcrumbs-crumb-select', spy);
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
     await firstCrumb.updateComplete;
@@ -201,7 +201,7 @@ describe('Breadcrumb', () => {
     menu.dispatchEvent(new CustomEvent('forge-menu-select', { bubbles: true, composed: true, detail: { value: '/recent' } }));
 
     expect(spy).toHaveBeenCalledOnce();
-    const detail = spy.mock.calls[0][0].detail as IBreadcrumbSelectEventData;
+    const detail = spy.mock.calls[0][0].detail as IBreadcrumbsSelectEventData;
     expect(detail.crumb).toEqual(crumbsWithSiblings[0].siblingRoutes![0]);
     expect(detail.index).toBe(0);
   });
@@ -221,14 +221,14 @@ describe('Breadcrumb', () => {
     container.style.overflow = 'hidden';
     document.body.appendChild(container);
 
-    const screen = render(html`<forge-breadcrumb .crumbs=${manyCrumbs}></forge-breadcrumb>`, { container });
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${manyCrumbs}></forge-breadcrumbs>`, { container });
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
     await frame();
     await frame();
     await el.updateComplete;
 
-    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumb__collapsed-trigger');
+    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumbs__collapsed-trigger');
     expect(collapsedTrigger).not.toBeNull();
 
     container.remove();
@@ -236,26 +236,26 @@ describe('Breadcrumb', () => {
 
   it('should not show collapsed menu trigger when content fits container width', async () => {
     const shortCrumbs: ICrumbConfiguration[] = [{ label: 'A', path: '/a' }, { label: 'B' }];
-    const screen = render(html`<forge-breadcrumb .crumbs=${shortCrumbs}></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${shortCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
     await frame();
     await el.updateComplete;
 
-    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumb__collapsed-trigger');
+    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumbs__collapsed-trigger');
     expect(collapsedTrigger).toBeNull();
   });
 
   it('should reflect show-home attribute to property', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs} show-home></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
 
     expect(el.showHome).toBe(true);
   });
 
   it('should reflect separator attribute to property', async () => {
-    const screen = render(html`<forge-breadcrumb .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumb>`);
-    const el = screen.container.querySelector('forge-breadcrumb') as BreadcrumbComponent;
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
 
     expect(el.separator).toBe('chevron_right');
   });
