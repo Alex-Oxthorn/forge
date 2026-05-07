@@ -81,8 +81,8 @@ export class BreadcrumbsComponent extends BaseLitElement {
   @state()
   private _expandedContentWidth = 0;
 
-  @query('.forge-breadcrumbs')
-  private _listEl?: HTMLElement;
+  @query('.forge-breadcrumbs', true)
+  private _listEl!: HTMLElement;
 
   #internals: ElementInternals;
   #containerObserver?: ResizeObserver;
