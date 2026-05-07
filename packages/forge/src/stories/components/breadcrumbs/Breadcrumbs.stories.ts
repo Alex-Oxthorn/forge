@@ -4,13 +4,13 @@ import { standaloneStoryParams } from '../../utils.js';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFolder, tylIconDescription, tylIconSettings, tylIconHome } from '@tylertech/tyler-icons';
 
-import '@tylertech/forge/breadcrumb';
-import type { IBreadcrumbComponent } from '@tylertech/forge/breadcrumb';
-import type { ICrumbConfiguration } from '@tylertech/forge/breadcrumb';
+import '@tylertech/forge/breadcrumbs';
+import type { BreadcrumbsComponent } from '@tylertech/forge/breadcrumbs';
+import type { ICrumbConfiguration } from '@tylertech/forge/breadcrumbs';
 
 IconRegistry.define([tylIconFolder, tylIconDescription, tylIconSettings, tylIconHome]);
 
-const component = 'forge-breadcrumb';
+const component = 'forge-breadcrumbs';
 
 const basicCrumbs: ICrumbConfiguration[] = [
   { label: 'Home', path: '/' },
@@ -45,10 +45,10 @@ const richCrumbs: ICrumbConfiguration[] = [
 ];
 
 const meta = {
-  title: 'Components/Breadcrumb',
+  title: 'Components/Breadcrumbs',
   tags: ['new'],
   render: args => {
-    const el = document.createElement(component) as IBreadcrumbComponent & HTMLElement;
+    const el = document.createElement(component) as BreadcrumbsComponent & HTMLElement;
     el.crumbs = args.crumbs;
     el.showHome = args.showHome;
     el.separator = args.separator;
@@ -79,7 +79,7 @@ export const Demo: Story = {};
 export const WithHomeButton: Story = {
   ...standaloneStoryParams,
   render: () => {
-    const el = document.createElement(component) as IBreadcrumbComponent & HTMLElement;
+    const el = document.createElement(component) as BreadcrumbsComponent & HTMLElement;
     el.crumbs = basicCrumbs;
     el.showHome = true;
     return el;
@@ -89,7 +89,7 @@ export const WithHomeButton: Story = {
 export const WithIcons: Story = {
   ...standaloneStoryParams,
   render: () => {
-    const el = document.createElement(component) as IBreadcrumbComponent & HTMLElement;
+    const el = document.createElement(component) as BreadcrumbsComponent & HTMLElement;
     el.crumbs = richCrumbs;
     return el;
   }
@@ -99,7 +99,7 @@ export const AutoCollapse: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <div style="width: 250px; border: 1px dashed var(--forge-theme-outline); padding: 8px; resize: horizontal; overflow: hidden;">
-      <forge-breadcrumb .crumbs=${basicCrumbs}></forge-breadcrumb>
+      <forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>
     </div>
   `
 };
@@ -107,7 +107,7 @@ export const AutoCollapse: Story = {
 export const RichCrumbs: Story = {
   ...standaloneStoryParams,
   render: () => {
-    const el = document.createElement(component) as IBreadcrumbComponent & HTMLElement;
+    const el = document.createElement(component) as BreadcrumbsComponent & HTMLElement;
     el.crumbs = richCrumbs;
     el.showHome = true;
     return el;
@@ -118,9 +118,9 @@ export const CustomSeparator: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <div style="display: flex; flex-direction: column; gap: 16px;">
-      <forge-breadcrumb .crumbs=${basicCrumbs} separator="slash_forward"></forge-breadcrumb>
-      <forge-breadcrumb .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumb>
-      <forge-breadcrumb .crumbs=${basicCrumbs} separator="arrow_right"></forge-breadcrumb>
+      <forge-breadcrumbs .crumbs=${basicCrumbs} separator="slash_forward"></forge-breadcrumbs>
+      <forge-breadcrumbs .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumbs>
+      <forge-breadcrumbs .crumbs=${basicCrumbs} separator="arrow_right"></forge-breadcrumbs>
     </div>
   `
 };

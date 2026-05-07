@@ -1,7 +1,7 @@
-@use '../../core/styles/tokens/breadcrumb/tokens';
+@use '../../core/styles/tokens/breadcrumbs/tokens';
 @use '../../core/styles/tokens/token-utils';
 
-$_module: breadcrumb;
+$_module: breadcrumbs;
 $_tokens: tokens.$tokens;
 
 @mixin provide-theme($theme) {

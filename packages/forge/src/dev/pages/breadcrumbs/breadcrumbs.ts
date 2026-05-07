@@ -1,13 +1,12 @@
 import '$src/shared';
-import '@tylertech/forge/breadcrumb';
-import type { IBreadcrumbComponent } from '@tylertech/forge/breadcrumb';
-import type { ICrumbConfiguration } from '@tylertech/forge/breadcrumb';
+import '@tylertech/forge/breadcrumbs';
+import type { BreadcrumbsComponent, ICrumbConfiguration } from '@tylertech/forge/breadcrumbs';
 import type { SwitchComponent } from '@tylertech/forge/switch';
 import type { SelectComponent } from '@tylertech/forge/select';
 import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFolder, tylIconDescription, tylIconSettings, tylIconHome, tylIconChevronRight, tylIconArrowRight } from '@tylertech/tyler-icons';
 
-import './breadcrumb.scss';
+import './breadcrumbs.scss';
 
 IconRegistry.define([tylIconFolder, tylIconDescription, tylIconSettings, tylIconHome, tylIconChevronRight, tylIconArrowRight]);
 
@@ -36,7 +35,7 @@ const buildCrumbs = (): ICrumbConfiguration[] =>
         : undefined
   }));
 
-const breadcrumbs = document.querySelectorAll<IBreadcrumbComponent & HTMLElement>('forge-breadcrumb');
+const breadcrumbs = document.querySelectorAll<BreadcrumbsComponent & HTMLElement>('forge-breadcrumbs');
 
 const updateAll = (): void => {
   const crumbs = buildCrumbs();
@@ -115,10 +114,10 @@ if (removeBtn) {
   });
 }
 
-window.addEventListener('forge-breadcrumb-crumb-select', evt => {
+window.addEventListener('forge-breadcrumbs-crumb-select', evt => {
   console.log('Crumb selected:', (evt as CustomEvent).detail);
 });
 
-window.addEventListener('forge-breadcrumb-home-click', () => {
+window.addEventListener('forge-breadcrumbs-home-click', () => {
   console.log('Home clicked');
 });

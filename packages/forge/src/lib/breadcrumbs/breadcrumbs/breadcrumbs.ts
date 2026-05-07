@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
+import { CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY, CUSTOM_ELEMENT_NAME_PROPERTY, ForgeResizeObserver } from '@tylertech/forge-core';
 import { tylIconDotsHorizontal, tylIconHome, tylIconSlashForward } from '@tylertech/tyler-icons';
 import { html, nothing, PropertyValues, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
@@ -85,7 +85,6 @@ export class BreadcrumbsComponent extends BaseLitElement {
   private _listEl!: HTMLElement;
 
   #internals: ElementInternals;
-  #containerObserver?: ResizeObserver;
   #containerWidth = Infinity;
 
   constructor() {
@@ -112,7 +111,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
-    this.#containerObserver?.disconnect();
+    ForgeResizeObserver.unobserve(this);
   }
 
   public render(): TemplateResult {
@@ -190,11 +189,10 @@ export class BreadcrumbsComponent extends BaseLitElement {
       return;
     }
 
-    this.#containerObserver = new ResizeObserver(entries => {
-      this.#containerWidth = entries[0].contentRect.width;
+    ForgeResizeObserver.observe(this, entry => {
+      this.#containerWidth = entry.contentRect.width;
       this.#checkCollapse();
     });
-    this.#containerObserver.observe(this);
   }
 
   #checkCollapse(): void {

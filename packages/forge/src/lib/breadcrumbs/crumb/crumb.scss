@@ -1,7 +1,7 @@
 @use './core' as *;
 @use '../../state-layer';
 @use '../../focus-indicator';
-@use '../core/styles/shape';
+@use '../../core/styles/shape';
 
 :host {
   @include host;
@@ -32,7 +32,8 @@ forge-focus-indicator {
   @include focus-indicator.provide-theme(
     (
       color: #{token(text-color)},
-      shape: #{shape.variable(medium)} outward-offset: 0px
+      shape: #{shape.variable(medium)},
+      outward-offset: 0px
     )
   );
 }

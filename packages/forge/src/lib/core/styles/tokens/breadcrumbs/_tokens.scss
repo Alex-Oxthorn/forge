@@ -4,8 +4,8 @@
 @use '../../utils';
 
 $tokens: (
-  gap: utils.module-val(breadcrumb, gap, 0px),
-  separator-theme: utils.module-val(breadcrumb, separator-theme, theme.variable(text-low))
+  gap: utils.module-val(breadcrumbs, gap, 0px),
+  separator-theme: utils.module-val(breadcrumbs, separator-theme, theme.variable(text-low))
 ) !default;
 
 @function get($key) {
