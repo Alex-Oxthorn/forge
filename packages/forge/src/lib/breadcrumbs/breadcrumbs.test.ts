@@ -259,4 +259,59 @@ describe('Breadcrumb', () => {
 
     expect(el.separatorIconName).toBe('chevron_right');
   });
+
+  it('should render a tooltip on the home button when show-home is set', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    const tooltip = el.shadowRoot!.querySelector('forge-tooltip');
+    expect(tooltip).not.toBeNull();
+  });
+
+  it('should not render a tooltip when show-home is unset', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    const tooltip = el.shadowRoot!.querySelector('forge-tooltip');
+    expect(tooltip).toBeNull();
+  });
+
+  it('should display "Home" as the default tooltip text on the home button', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    const tooltip = el.shadowRoot!.querySelector('forge-tooltip');
+    expect(tooltip!.textContent).toBe('Home');
+  });
+
+  it('should display custom tooltip text when home-tooltip attribute is set', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home home-tooltip="Go to homepage"></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    const tooltip = el.shadowRoot!.querySelector('forge-tooltip');
+    expect(tooltip!.textContent).toBe('Go to homepage');
+  });
+
+  it('should update tooltip text when homeTooltip property changes', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    el.homeTooltip = 'Navigate home';
+    await el.updateComplete;
+
+    const tooltip = el.shadowRoot!.querySelector('forge-tooltip');
+    expect(tooltip!.textContent).toBe('Navigate home');
+  });
+
+  it('should reflect home-tooltip attribute to property', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} home-tooltip="Custom home"></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+
+    expect(el.homeTooltip).toBe('Custom home');
+  });
 });

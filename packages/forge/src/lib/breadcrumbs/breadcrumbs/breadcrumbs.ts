@@ -8,10 +8,12 @@ import { IconRegistry } from '../../icon/index.js';
 import { IconButtonComponent } from '../../icon-button/index.js';
 import { IconComponent } from '../../icon/index.js';
 import { MenuComponent } from '../../menu/index.js';
+import { TooltipComponent } from '../../tooltip/index.js';
 
 import '../../icon/icon.js';
 import '../../icon-button/icon-button.js';
 import '../../menu/menu.js';
+import '../../tooltip/tooltip.js';
 import '../crumb/crumb.js';
 
 import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS, BREADCRUMBS_TAG_NAME } from './breadcrumbs-constants.js';
@@ -35,6 +37,11 @@ import styles from './breadcrumbs.scss';
  * @cssproperty --forge-breadcrumbs-gap - The gap between breadcrumb items.
  * @cssproperty --forge-breadcrumbs-separator-theme - The color theme for separator icons.
  *
+ * @dependency forge-tooltip
+ *
+ * @property {string} [homeTooltip='Home'] - The tooltip text for the home button.
+ * @attribute {string} [home-tooltip='Home'] - The tooltip text for the home button.
+ *
  * @fires {CustomEvent<IBreadcrumbsSelectEventData>} forge-breadcrumbs-crumb-select - Dispatched when a crumb is clicked.
  * @fires {CustomEvent<void>} forge-breadcrumbs-home-click - Dispatched when the home button is clicked.
  */
@@ -50,7 +57,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BREADCRUMBS_TAG_NAME;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [CrumbComponent, IconButtonComponent, IconComponent, MenuComponent];
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [CrumbComponent, IconButtonComponent, IconComponent, MenuComponent, TooltipComponent];
 
   /**
    * The breadcrumb items to render.
@@ -74,6 +81,14 @@ export class BreadcrumbsComponent extends BaseLitElement {
    */
   @property({ attribute: 'separator-icon-name' })
   public separatorIconName = 'slash_forward';
+
+  /**
+   * The tooltip text for the home button.
+   * @attribute home-tooltip
+   * @default 'Home'
+   */
+  @property({ attribute: 'home-tooltip' })
+  public homeTooltip = 'Home';
 
   @state()
   private _collapsed = false;
@@ -133,6 +148,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
         <forge-icon-button class="forge-breadcrumbs__home-button" aria-label="Home" @click=${this.#handleHomeClick}>
           <forge-icon name="home"></forge-icon>
         </forge-icon-button>
+        <forge-tooltip>${this.homeTooltip}</forge-tooltip>
         ${this.#renderSeparator()}
       </li>
     `;
