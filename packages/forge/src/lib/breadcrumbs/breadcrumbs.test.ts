@@ -53,7 +53,7 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button');
+    const homeButton = el.shadowRoot!.querySelector('.home-button');
     expect(homeButton).not.toBeNull();
   });
 
@@ -62,7 +62,7 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button');
+    const homeButton = el.shadowRoot!.querySelector('.home-button');
     expect(homeButton).toBeNull();
   });
 
@@ -74,7 +74,7 @@ describe('Breadcrumb', () => {
     const spy = vi.fn();
     el.addEventListener('forge-breadcrumbs-home-click', spy);
 
-    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button') as HTMLElement;
+    const homeButton = el.shadowRoot!.querySelector('.home-button') as HTMLElement;
     homeButton.click();
 
     expect(spy).toHaveBeenCalledOnce();
@@ -111,7 +111,7 @@ describe('Breadcrumb', () => {
 
     for (const crumb of nonLastCrumbs) {
       await crumb.updateComplete;
-      const sep = crumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__separator') as any;
+      const sep = crumb.shadowRoot!.querySelector('.separator') as any;
       expect(sep).not.toBeNull();
       expect(sep.name).toBe('chevron_right');
     }
@@ -125,7 +125,7 @@ describe('Breadcrumb', () => {
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const icon = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__icon');
+    const icon = firstCrumb.shadowRoot!.querySelector('.icon');
     expect(icon).not.toBeNull();
   });
 
@@ -137,7 +137,7 @@ describe('Breadcrumb', () => {
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const secondary = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__secondary-text');
+    const secondary = firstCrumb.shadowRoot!.querySelector('.secondary-text');
     expect(secondary).not.toBeNull();
     expect(secondary!.textContent).toBe('Main page');
   });
@@ -160,7 +160,7 @@ describe('Breadcrumb', () => {
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__sibling-trigger');
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.sibling-trigger');
     expect(siblingTrigger).not.toBeNull();
   });
 
@@ -171,7 +171,7 @@ describe('Breadcrumb', () => {
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__sibling-trigger');
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.sibling-trigger');
     expect(siblingTrigger).toBeNull();
   });
 
@@ -228,7 +228,7 @@ describe('Breadcrumb', () => {
     await frame();
     await el.updateComplete;
 
-    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumbs__collapsed-trigger');
+    const collapsedTrigger = el.shadowRoot!.querySelector('.collapsed-trigger');
     expect(collapsedTrigger).not.toBeNull();
 
     container.remove();
@@ -242,7 +242,7 @@ describe('Breadcrumb', () => {
     await frame();
     await el.updateComplete;
 
-    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumbs__collapsed-trigger');
+    const collapsedTrigger = el.shadowRoot!.querySelector('.collapsed-trigger');
     expect(collapsedTrigger).toBeNull();
   });
 
@@ -320,7 +320,7 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button');
+    const homeButton = el.shadowRoot!.querySelector('.home-button');
     expect(homeButton!.getAttribute('aria-label')).toBe('Go home');
   });
 
@@ -329,7 +329,7 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button');
+    const homeButton = el.shadowRoot!.querySelector('.home-button');
     expect(homeButton!.getAttribute('aria-label')).toBe('Home');
   });
 
@@ -354,7 +354,7 @@ describe('Breadcrumb', () => {
     await frame();
     await el.updateComplete;
 
-    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumbs__collapsed-trigger');
+    const collapsedTrigger = el.shadowRoot!.querySelector('.collapsed-trigger');
     expect(collapsedTrigger!.getAttribute('aria-label')).toBe('Show all breadcrumbs');
 
     container.remove();
@@ -381,7 +381,7 @@ describe('Breadcrumb', () => {
     await frame();
     await el.updateComplete;
 
-    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumbs__collapsed-trigger');
+    const collapsedTrigger = el.shadowRoot!.querySelector('.collapsed-trigger');
     expect(collapsedTrigger!.getAttribute('aria-label')).toBe('Alle anzeigen');
 
     container.remove();
@@ -409,7 +409,7 @@ describe('Breadcrumb', () => {
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__sibling-trigger');
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.sibling-trigger');
     expect(siblingTrigger!.getAttribute('aria-label')).toBe('Sibling routes');
   });
 
@@ -428,7 +428,7 @@ describe('Breadcrumb', () => {
 
     const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__sibling-trigger');
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.sibling-trigger');
     expect(siblingTrigger!.getAttribute('aria-label')).toBe('Verwandte Routen');
   });
 

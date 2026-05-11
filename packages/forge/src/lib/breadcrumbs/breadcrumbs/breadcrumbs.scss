@@ -13,19 +13,19 @@
   @include base;
 }
 
-.forge-breadcrumbs__separator {
+.separator {
   @include separator;
 }
 
-.forge-breadcrumbs__home-button {
+.home-button {
   @include home-button;
 }
 
-.forge-breadcrumbs__collapsed-trigger {
+.collapsed-trigger {
   @include collapsed-trigger;
 }
 
-.forge-breadcrumbs__crumb-item {
+.crumb-item {
   @include crumb-item;
 }
 

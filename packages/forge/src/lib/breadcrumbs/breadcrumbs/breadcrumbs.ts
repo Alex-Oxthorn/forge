@@ -166,8 +166,8 @@ export class BreadcrumbsComponent extends BaseLitElement {
       return nothing;
     }
     return html`
-      <li class="forge-breadcrumbs__crumb-item">
-        <forge-icon-button class="forge-breadcrumbs__home-button" aria-label=${this.homeTooltip} @click=${this.#handleHomeClick}>
+      <li class="crumb-item">
+        <forge-icon-button class="home-button" aria-label=${this.homeTooltip} @click=${this.#handleHomeClick}>
           <forge-icon name="home"></forge-icon>
         </forge-icon-button>
         <forge-tooltip>${this.homeTooltip}</forge-tooltip>
@@ -177,14 +177,14 @@ export class BreadcrumbsComponent extends BaseLitElement {
   }
 
   #renderSeparator(): TemplateResult {
-    return html`<forge-icon class="forge-breadcrumbs__separator" .name=${this.separatorIconName}></forge-icon>`;
+    return html`<forge-icon class="separator" .name=${this.separatorIconName}></forge-icon>`;
   }
 
   #renderExpanded(): TemplateResult[] {
     return this.crumbs.map((crumb, index) => {
       const isLast = index === this.crumbs.length - 1;
       return html`
-        <li class="forge-breadcrumbs__crumb-item">
+        <li class="crumb-item">
           <forge-breadcrumbs-item
             .crumb=${crumb}
             .index=${index}
@@ -210,9 +210,9 @@ export class BreadcrumbsComponent extends BaseLitElement {
     }));
 
     return html`
-      <li class="forge-breadcrumbs__crumb-item">
+      <li class="crumb-item">
         <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleCollapsedMenuSelect}>
-          <forge-icon-button class="forge-breadcrumbs__collapsed-trigger" aria-label=${this.expandLabel}>
+          <forge-icon-button class="collapsed-trigger" aria-label=${this.expandLabel}>
             <forge-icon name="dots_horizontal"></forge-icon>
           </forge-icon-button>
         </forge-menu>
@@ -220,7 +220,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
       </li>
       ${lastCrumb
         ? html`
-            <li class="forge-breadcrumbs__crumb-item">
+            <li class="crumb-item">
               <forge-breadcrumbs-item .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active .siblingRoutesLabel=${this.siblingRoutesLabel}>
               </forge-breadcrumbs-item>
             </li>

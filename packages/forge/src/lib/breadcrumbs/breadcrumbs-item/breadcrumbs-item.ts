@@ -54,8 +54,8 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
   #renderContent(): TemplateResult {
     if (this.active || !this.crumb.path) {
       return html`
-        <span class="forge-breadcrumbs-item__active" aria-current=${this.active ? 'page' : nothing}>
-          <span class="forge-breadcrumbs-item__label-text">${this.crumb.label}</span>
+        <span class="active" aria-current=${this.active ? 'page' : nothing}>
+          <span class="label-text">${this.crumb.label}</span>
         </span>
       `;
     }
@@ -64,9 +64,9 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
       <button class="forge-breadcrumbs-item__link" type="button" @click=${this.#handleClick}>
         <forge-state-layer></forge-state-layer>
         <forge-focus-indicator></forge-focus-indicator>
-        ${this.crumb.icon ? html`<forge-icon class="forge-breadcrumbs-item__icon" .name=${this.crumb.icon}></forge-icon>` : nothing}
-        <span class="forge-breadcrumbs-item__label-text">${this.crumb.label}</span>
-        ${this.crumb.secondary ? html`<span class="forge-breadcrumbs-item__secondary-text">${this.crumb.secondary}</span>` : nothing}
+        ${this.crumb.icon ? html`<forge-icon class="icon" .name=${this.crumb.icon}></forge-icon>` : nothing}
+        <span class="label-text">${this.crumb.label}</span>
+        ${this.crumb.secondary ? html`<span class="secondary-text">${this.crumb.secondary}</span>` : nothing}
       </button>
     `;
   }
@@ -75,7 +75,7 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
     if (!this.separator || this.active) {
       return nothing;
     }
-    return html`<forge-icon class="forge-breadcrumbs-item__separator" .name=${this.separator}></forge-icon>`;
+    return html`<forge-icon class="separator" .name=${this.separator}></forge-icon>`;
   }
 
   #renderSiblingTrigger(): TemplateResult | typeof nothing {
@@ -93,7 +93,7 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
 
     return html`
       <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleSiblingSelect} dense>
-        <forge-icon-button class="forge-breadcrumbs-item__sibling-trigger" aria-label=${this.siblingRoutesLabel}>
+        <forge-icon-button class="sibling-trigger" aria-label=${this.siblingRoutesLabel}>
           <forge-icon name="arrow_drop_down"></forge-icon>
         </forge-icon-button>
       </forge-menu>

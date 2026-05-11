@@ -16,7 +16,7 @@
   @include base;
 }
 
-.forge-breadcrumbs-item__link {
+.link {
   @include link;
 
   forge-state-layer {
@@ -38,27 +38,27 @@ forge-focus-indicator {
   );
 }
 
-.forge-breadcrumbs-item__label-text {
+.label-text {
   @include label-text;
 }
 
-.forge-breadcrumbs-item__secondary-text {
+.secondary-text {
   @include secondary-text;
 }
 
-.forge-breadcrumbs-item__icon {
+.icon {
   @include crumb-icon;
 }
 
-.forge-breadcrumbs-item__sibling-trigger {
+.sibling-trigger {
   @include sibling-trigger;
 }
 
-.forge-breadcrumbs-item__active {
+.active {
   @include active;
 }
 
-.forge-breadcrumbs-item__separator {
+.separator {
   @include separator;
 }
 
