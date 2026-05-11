@@ -61,7 +61,7 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
     }
 
     return html`
-      <button class="forge-breadcrumbs-item__link" type="button" @click=${this.#handleClick}>
+      <button class="link" type="button" @click=${this.#handleClick}>
         <forge-state-layer></forge-state-layer>
         <forge-focus-indicator></forge-focus-indicator>
         ${this.crumb.icon ? html`<forge-icon class="icon" .name=${this.crumb.icon}></forge-icon>` : nothing}

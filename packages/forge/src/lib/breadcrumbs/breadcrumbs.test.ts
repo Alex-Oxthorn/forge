@@ -91,7 +91,7 @@ describe('Breadcrumb', () => {
     const crumbEls = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item');
     const firstCrumb = crumbEls[0];
     await firstCrumb.updateComplete;
-    const link = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__link') as HTMLElement;
+    const link = firstCrumb.shadowRoot!.querySelector('.link') as HTMLElement;
     link.click();
 
     expect(spy).toHaveBeenCalledOnce();
