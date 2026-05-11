@@ -134,15 +134,14 @@ export class BreadcrumbsComponent extends BaseLitElement {
     this.#setupResizeObserver();
   }
 
-  public override updated(changedProperties: PropertyValues<this>): void {
+  public override async updated(changedProperties: PropertyValues<this>): Promise<void> {
     if (changedProperties.has('crumbs') || changedProperties.has('showHome') || changedProperties.has('separatorIconName')) {
       this._collapsed = false;
-      requestAnimationFrame(() => {
-        if (this._listEl) {
-          this._expandedContentWidth = this._listEl.scrollWidth;
-          this.#checkCollapse();
-        }
-      });
+      await this.updateComplete;
+      if (this._listEl) {
+        this._expandedContentWidth = this._listEl.scrollWidth;
+        this.#checkCollapse();
+      }
     }
   }
 
