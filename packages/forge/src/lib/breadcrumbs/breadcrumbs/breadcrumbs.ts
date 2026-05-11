@@ -16,11 +16,25 @@ import '../../menu/menu.js';
 import '../../tooltip/tooltip.js';
 import '../breadcrumbs-item/breadcrumbs-item.js';
 
-import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS, BREADCRUMBS_TAG_NAME } from './breadcrumbs-constants.js';
 import { BreadcrumbsItemComponent } from '../breadcrumbs-item/breadcrumbs-item.js';
 import type { IMenuOption } from '../../menu/menu-constants.js';
 
 import styles from './breadcrumbs.scss';
+
+export const BREADCRUMBS_TAG_NAME: keyof HTMLElementTagNameMap = 'forge-breadcrumbs';
+
+export interface ICrumbConfiguration {
+  label: string;
+  path?: string;
+  icon?: string;
+  secondary?: string;
+  siblingRoutes?: ICrumbConfiguration[];
+}
+
+export interface IBreadcrumbsSelectEventData {
+  crumb: ICrumbConfiguration;
+  index: number;
+}
 
 /**
  * @tag forge-breadcrumbs
@@ -347,7 +361,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
     if (typeof index === 'number' && index >= 0 && index < this.#slottedItems.length) {
       const crumb = this.#slottedItems[index].crumb;
       this.dispatchEvent(
-        new CustomEvent<IBreadcrumbsSelectEventData>(BREADCRUMBS_CONSTANTS.events.CRUMB_SELECT, {
+        new CustomEvent<IBreadcrumbsSelectEventData>('forge-breadcrumbs-crumb-select', {
           bubbles: true,
           composed: true,
           detail: { crumb, index }
@@ -358,7 +372,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
 
   #handleHomeClick(): void {
     this.dispatchEvent(
-      new CustomEvent<void>(BREADCRUMBS_CONSTANTS.events.HOME_CLICK, {
+      new CustomEvent<void>('forge-breadcrumbs-home-click', {
         bubbles: true,
         composed: true
       })
@@ -370,7 +384,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
     if (typeof index === 'number' && index >= 0 && index < this.crumbs.length) {
       const crumb = this.crumbs[index];
       this.dispatchEvent(
-        new CustomEvent<IBreadcrumbsSelectEventData>(BREADCRUMBS_CONSTANTS.events.CRUMB_SELECT, {
+        new CustomEvent<IBreadcrumbsSelectEventData>('forge-breadcrumbs-crumb-select', {
           bubbles: true,
           composed: true,
           detail: { crumb, index }
@@ -383,5 +397,10 @@ export class BreadcrumbsComponent extends BaseLitElement {
 declare global {
   interface HTMLElementTagNameMap {
     'forge-breadcrumbs': BreadcrumbsComponent;
+  }
+
+  interface HTMLElementEventMap {
+    'forge-breadcrumbs-crumb-select': CustomEvent<IBreadcrumbsSelectEventData>;
+    'forge-breadcrumbs-home-click': CustomEvent<void>;
   }
 }

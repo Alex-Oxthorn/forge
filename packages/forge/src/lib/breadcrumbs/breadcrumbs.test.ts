@@ -2,9 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 
-import type { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.js';
+import type { BreadcrumbsComponent, ICrumbConfiguration, IBreadcrumbsSelectEventData } from './breadcrumbs/breadcrumbs.js';
 import type { BreadcrumbsItemComponent } from './breadcrumbs-item/breadcrumbs-item.js';
-import type { ICrumbConfiguration, IBreadcrumbsSelectEventData } from './breadcrumbs/breadcrumbs-constants.js';
 import { frame } from '../core/utils/utils.js';
 
 import './breadcrumbs/breadcrumbs.js';
