@@ -69,11 +69,11 @@ export class BreadcrumbsComponent extends BaseLitElement {
 
   /**
    * The icon name for the separator between crumbs.
-   * @attribute
+   * @attribute separator-icon-name
    * @default 'slash_forward'
    */
-  @property()
-  public separator = 'slash_forward';
+  @property({ attribute: 'separator-icon-name' })
+  public separatorIconName = 'slash_forward';
 
   @state()
   private _collapsed = false;
@@ -98,7 +98,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
   }
 
   public override updated(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has('crumbs') || changedProperties.has('showHome') || changedProperties.has('separator')) {
+    if (changedProperties.has('crumbs') || changedProperties.has('showHome') || changedProperties.has('separatorIconName')) {
       this._collapsed = false;
       requestAnimationFrame(() => {
         if (this._listEl) {
@@ -139,7 +139,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
   }
 
   #renderSeparator(): TemplateResult {
-    return html`<forge-icon class="forge-breadcrumbs__separator" .name=${this.separator}></forge-icon>`;
+    return html`<forge-icon class="forge-breadcrumbs__separator" .name=${this.separatorIconName}></forge-icon>`;
   }
 
   #renderExpanded(): TemplateResult[] {
@@ -147,7 +147,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
       const isLast = index === this.crumbs.length - 1;
       return html`
         <li class="forge-breadcrumbs__crumb-item">
-          <forge-crumb .crumb=${crumb} .index=${index} ?active=${isLast} .separator=${!isLast ? this.separator : ''}> </forge-crumb>
+          <forge-crumb .crumb=${crumb} .index=${index} ?active=${isLast} .separator=${!isLast ? this.separatorIconName : ''}> </forge-crumb>
         </li>
       `;
     });

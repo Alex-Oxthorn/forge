@@ -101,7 +101,7 @@ describe('Breadcrumb', () => {
   });
 
   it('should render a custom separator icon when separator property is set', async () => {
-    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumbs>`);
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} separator-icon-name="chevron_right"></forge-breadcrumbs>`);
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
@@ -253,10 +253,10 @@ describe('Breadcrumb', () => {
     expect(el.showHome).toBe(true);
   });
 
-  it('should reflect separator attribute to property', async () => {
-    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumbs>`);
+  it('should reflect separator-icon-name attribute to property', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} separator-icon-name="chevron_right"></forge-breadcrumbs>`);
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
 
-    expect(el.separator).toBe('chevron_right');
+    expect(el.separatorIconName).toBe('chevron_right');
   });
 });

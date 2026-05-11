@@ -51,7 +51,7 @@ const meta = {
     const el = document.createElement(component) as BreadcrumbsComponent & HTMLElement;
     el.crumbs = args.crumbs;
     el.showHome = args.showHome;
-    el.separator = args.separator;
+    el.separatorIconName = args.separatorIconName;
     return el;
   },
   component,
@@ -61,12 +61,12 @@ const meta = {
   argTypes: {
     crumbs: { control: 'object' },
     showHome: { control: 'boolean' },
-    separator: { control: 'select', options: ['slash_forward', 'chevron_right', 'arrow_right'] }
+    separatorIconName: { control: 'select', options: ['slash_forward', 'chevron_right', 'arrow_right'] }
   },
   args: {
     crumbs: basicCrumbs,
     showHome: false,
-    separator: 'slash_forward'
+    separatorIconName: 'slash_forward'
   }
 } satisfies Meta;
 
@@ -118,9 +118,9 @@ export const CustomSeparator: Story = {
   ...standaloneStoryParams,
   render: () => html`
     <div style="display: flex; flex-direction: column; gap: 16px;">
-      <forge-breadcrumbs .crumbs=${basicCrumbs} separator="slash_forward"></forge-breadcrumbs>
-      <forge-breadcrumbs .crumbs=${basicCrumbs} separator="chevron_right"></forge-breadcrumbs>
-      <forge-breadcrumbs .crumbs=${basicCrumbs} separator="arrow_right"></forge-breadcrumbs>
+      <forge-breadcrumbs .crumbs=${basicCrumbs} separator-icon-name="slash_forward"></forge-breadcrumbs>
+      <forge-breadcrumbs .crumbs=${basicCrumbs} separator-icon-name="chevron_right"></forge-breadcrumbs>
+      <forge-breadcrumbs .crumbs=${basicCrumbs} separator-icon-name="arrow_right"></forge-breadcrumbs>
     </div>
   `
 };

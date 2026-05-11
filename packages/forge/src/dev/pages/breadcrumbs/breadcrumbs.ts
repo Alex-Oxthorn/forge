@@ -69,7 +69,7 @@ if (showHomeSwitch) {
 if (separatorSelect) {
   separatorSelect.addEventListener('change', () => {
     breadcrumbs.forEach(bc => {
-      bc.separator = separatorSelect.value;
+      bc.separatorIconName = separatorSelect.value;
     });
   });
 }
