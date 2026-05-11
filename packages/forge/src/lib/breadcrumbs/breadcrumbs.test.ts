@@ -314,4 +314,128 @@ describe('Breadcrumb', () => {
 
     expect(el.homeTooltip).toBe('Custom home');
   });
+
+  it('should use homeTooltip as the aria-label on the home button', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home home-tooltip="Go home"></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button');
+    expect(homeButton!.getAttribute('aria-label')).toBe('Go home');
+  });
+
+  it('should use "Home" as the default aria-label on the home button', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} show-home></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    const homeButton = el.shadowRoot!.querySelector('.forge-breadcrumbs__home-button');
+    expect(homeButton!.getAttribute('aria-label')).toBe('Home');
+  });
+
+  it('should use "Show all breadcrumbs" as the default aria-label on the collapsed trigger', async () => {
+    const manyCrumbs: ICrumbConfiguration[] = [
+      { label: 'Level 1', path: '/1' },
+      { label: 'Level 2', path: '/2' },
+      { label: 'Level 3', path: '/3' },
+      { label: 'Level 4', path: '/4' },
+      { label: 'Level 5', path: '/5' },
+      { label: 'Current Page' }
+    ];
+    const container = document.createElement('div');
+    container.style.width = '150px';
+    container.style.overflow = 'hidden';
+    document.body.appendChild(container);
+
+    const screen = render(html`<forge-breadcrumbs .crumbs=${manyCrumbs}></forge-breadcrumbs>`, { container });
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+    await frame();
+    await frame();
+    await el.updateComplete;
+
+    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumbs__collapsed-trigger');
+    expect(collapsedTrigger!.getAttribute('aria-label')).toBe('Show all breadcrumbs');
+
+    container.remove();
+  });
+
+  it('should use a custom expand-label as the aria-label on the collapsed trigger', async () => {
+    const manyCrumbs: ICrumbConfiguration[] = [
+      { label: 'Level 1', path: '/1' },
+      { label: 'Level 2', path: '/2' },
+      { label: 'Level 3', path: '/3' },
+      { label: 'Level 4', path: '/4' },
+      { label: 'Level 5', path: '/5' },
+      { label: 'Current Page' }
+    ];
+    const container = document.createElement('div');
+    container.style.width = '150px';
+    container.style.overflow = 'hidden';
+    document.body.appendChild(container);
+
+    const screen = render(html`<forge-breadcrumbs .crumbs=${manyCrumbs} expand-label="Alle anzeigen"></forge-breadcrumbs>`, { container });
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+    await frame();
+    await frame();
+    await el.updateComplete;
+
+    const collapsedTrigger = el.shadowRoot!.querySelector('.forge-breadcrumbs__collapsed-trigger');
+    expect(collapsedTrigger!.getAttribute('aria-label')).toBe('Alle anzeigen');
+
+    container.remove();
+  });
+
+  it('should reflect expand-label attribute to property', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} expand-label="Expand navigation"></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+
+    expect(el.expandLabel).toBe('Expand navigation');
+  });
+
+  it('should use "Sibling routes" as the default aria-label on the sibling routes trigger', async () => {
+    const crumbsWithSiblings: ICrumbConfiguration[] = [
+      {
+        label: 'Projects',
+        path: '/projects',
+        siblingRoutes: [{ label: 'Recent', path: '/recent' }]
+      },
+      { label: 'End' }
+    ];
+    const screen = render(html`<forge-breadcrumbs .crumbs=${crumbsWithSiblings}></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    await firstCrumb.updateComplete;
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-crumb__sibling-trigger');
+    expect(siblingTrigger!.getAttribute('aria-label')).toBe('Sibling routes');
+  });
+
+  it('should use a custom sibling-routes-label as the aria-label on the sibling routes trigger', async () => {
+    const crumbsWithSiblings: ICrumbConfiguration[] = [
+      {
+        label: 'Projects',
+        path: '/projects',
+        siblingRoutes: [{ label: 'Recent', path: '/recent' }]
+      },
+      { label: 'End' }
+    ];
+    const screen = render(html`<forge-breadcrumbs .crumbs=${crumbsWithSiblings} sibling-routes-label="Verwandte Routen"></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+    await el.updateComplete;
+
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    await firstCrumb.updateComplete;
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-crumb__sibling-trigger');
+    expect(siblingTrigger!.getAttribute('aria-label')).toBe('Verwandte Routen');
+  });
+
+  it('should reflect sibling-routes-label attribute to property', async () => {
+    const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs} sibling-routes-label="Related routes"></forge-breadcrumbs>`);
+    const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+
+    expect(el.siblingRoutesLabel).toBe('Related routes');
+  });
 });

@@ -44,6 +44,9 @@ export class CrumbComponent extends BaseLitElement {
   @property()
   public separator = '';
 
+  @property({ attribute: 'sibling-routes-label' })
+  public siblingRoutesLabel = 'Sibling routes';
+
   public render(): TemplateResult {
     return html` <div class="forge-crumb">${this.#renderContent()} ${this.#renderSiblingTrigger()} ${this.#renderSeparator()}</div> `;
   }
@@ -90,7 +93,7 @@ export class CrumbComponent extends BaseLitElement {
 
     return html`
       <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleSiblingSelect} dense>
-        <forge-icon-button class="forge-crumb__sibling-trigger" aria-label="Sibling routes">
+        <forge-icon-button class="forge-crumb__sibling-trigger" aria-label=${this.siblingRoutesLabel}>
           <forge-icon name="arrow_drop_down"></forge-icon>
         </forge-icon-button>
       </forge-menu>

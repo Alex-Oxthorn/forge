@@ -42,6 +42,12 @@ import styles from './breadcrumbs.scss';
  * @property {string} [homeTooltip='Home'] - The tooltip text for the home button.
  * @attribute {string} [home-tooltip='Home'] - The tooltip text for the home button.
  *
+ * @property {string} [expandLabel='Show all breadcrumbs'] - The aria-label for the collapsed breadcrumbs trigger button.
+ * @attribute {string} [expand-label='Show all breadcrumbs'] - The aria-label for the collapsed breadcrumbs trigger button.
+ *
+ * @property {string} [siblingRoutesLabel='Sibling routes'] - The aria-label for the sibling routes trigger button within each crumb.
+ * @attribute {string} [sibling-routes-label='Sibling routes'] - The aria-label for the sibling routes trigger button within each crumb.
+ *
  * @fires {CustomEvent<IBreadcrumbsSelectEventData>} forge-breadcrumbs-crumb-select - Dispatched when a crumb is clicked.
  * @fires {CustomEvent<void>} forge-breadcrumbs-home-click - Dispatched when the home button is clicked.
  */
@@ -89,6 +95,22 @@ export class BreadcrumbsComponent extends BaseLitElement {
    */
   @property({ attribute: 'home-tooltip' })
   public homeTooltip = 'Home';
+
+  /**
+   * The aria-label for the collapsed breadcrumbs trigger button.
+   * @attribute expand-label
+   * @default 'Show all breadcrumbs'
+   */
+  @property({ attribute: 'expand-label' })
+  public expandLabel = 'Show all breadcrumbs';
+
+  /**
+   * The aria-label for the sibling routes trigger button within each crumb.
+   * @attribute sibling-routes-label
+   * @default 'Sibling routes'
+   */
+  @property({ attribute: 'sibling-routes-label' })
+  public siblingRoutesLabel = 'Sibling routes';
 
   @state()
   private _collapsed = false;
@@ -145,7 +167,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
     }
     return html`
       <li class="forge-breadcrumbs__crumb-item">
-        <forge-icon-button class="forge-breadcrumbs__home-button" aria-label="Home" @click=${this.#handleHomeClick}>
+        <forge-icon-button class="forge-breadcrumbs__home-button" aria-label=${this.homeTooltip} @click=${this.#handleHomeClick}>
           <forge-icon name="home"></forge-icon>
         </forge-icon-button>
         <forge-tooltip>${this.homeTooltip}</forge-tooltip>
@@ -163,7 +185,13 @@ export class BreadcrumbsComponent extends BaseLitElement {
       const isLast = index === this.crumbs.length - 1;
       return html`
         <li class="forge-breadcrumbs__crumb-item">
-          <forge-crumb .crumb=${crumb} .index=${index} ?active=${isLast} .separator=${!isLast ? this.separatorIconName : ''}> </forge-crumb>
+          <forge-crumb
+            .crumb=${crumb}
+            .index=${index}
+            ?active=${isLast}
+            .separator=${!isLast ? this.separatorIconName : ''}
+            .siblingRoutesLabel=${this.siblingRoutesLabel}>
+          </forge-crumb>
         </li>
       `;
     });
@@ -184,7 +212,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
     return html`
       <li class="forge-breadcrumbs__crumb-item">
         <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleCollapsedMenuSelect}>
-          <forge-icon-button class="forge-breadcrumbs__collapsed-trigger" aria-label="Show all breadcrumbs">
+          <forge-icon-button class="forge-breadcrumbs__collapsed-trigger" aria-label=${this.expandLabel}>
             <forge-icon name="dots_horizontal"></forge-icon>
           </forge-icon-button>
         </forge-menu>
@@ -193,7 +221,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
       ${lastCrumb
         ? html`
             <li class="forge-breadcrumbs__crumb-item">
-              <forge-crumb .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active> </forge-crumb>
+              <forge-crumb .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active .siblingRoutesLabel=${this.siblingRoutesLabel}> </forge-crumb>
             </li>
           `
         : nothing}
