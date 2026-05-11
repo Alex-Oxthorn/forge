@@ -20,7 +20,7 @@
 }
 
 @mixin separator {
-  color: #{token(separator-theme)};
+  color: #{token(separator-color)};
   padding-top: var(--forge-spacing-xxsmall);
 }
 

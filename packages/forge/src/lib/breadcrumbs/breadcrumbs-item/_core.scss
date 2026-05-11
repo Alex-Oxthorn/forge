@@ -49,7 +49,7 @@
 }
 
 @mixin crumb-icon {
-  color: #{token(icon-theme)};
+  color: #{token(icon-color)};
   margin-right: var(--forge-spacing-xsmall);
 }
 
@@ -66,6 +66,6 @@
 }
 
 @mixin separator {
-  color: #{breadcrumb-tokens.token(separator-theme)};
+  color: #{breadcrumb-tokens.token(separator-color)};
   padding-top: var(--forge-spacing-xxsmall);
 }

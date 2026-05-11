@@ -49,7 +49,7 @@ export interface IBreadcrumbsSelectEventData {
  * @csspart root - The root navigation element.
  *
  * @cssproperty --forge-breadcrumbs-gap - The gap between breadcrumb items.
- * @cssproperty --forge-breadcrumbs-separator-theme - The color theme for separator icons.
+ * @cssproperty --forge-breadcrumbs-separator-color - The color theme for separator icons.
  *
  * @dependency forge-tooltip
  *

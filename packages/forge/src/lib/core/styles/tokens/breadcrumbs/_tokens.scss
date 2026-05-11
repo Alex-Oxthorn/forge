@@ -5,7 +5,7 @@
 
 $tokens: (
   gap: utils.module-val(breadcrumbs, gap, 0px),
-  separator-theme: utils.module-val(breadcrumbs, separator-theme, theme.variable(text-low))
+  separator-color: utils.module-val(breadcrumbs, separator-color, theme.variable(text-low))
 ) !default;
 
 @function get($key) {
