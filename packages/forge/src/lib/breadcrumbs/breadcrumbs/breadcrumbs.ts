@@ -39,6 +39,8 @@ import styles from './breadcrumbs.scss';
  *
  * @dependency forge-tooltip
  *
+ * @slot - Slot for declaratively provided forge-breadcrumbs-item elements.
+ *
  * @property {string} [homeTooltip='Home'] - The tooltip text for the home button.
  * @attribute {string} [home-tooltip='Home'] - The tooltip text for the home button.
  *
@@ -123,6 +125,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
 
   #internals: ElementInternals;
   #containerWidth = Infinity;
+  #slottedItems: BreadcrumbsItemComponent[] = [];
 
   constructor() {
     super();
@@ -136,6 +139,12 @@ export class BreadcrumbsComponent extends BaseLitElement {
 
   public override async updated(changedProperties: PropertyValues<this>): Promise<void> {
     if (changedProperties.has('crumbs') || changedProperties.has('showHome') || changedProperties.has('separatorIconName')) {
+      this.#slottedItems.forEach(item => {
+        item.hidden = false;
+      });
+      if (changedProperties.has('crumbs') && this.crumbs.length > 0) {
+        this.#slottedItems = [];
+      }
       this._collapsed = false;
       await this.updateComplete;
       if (this._listEl) {
@@ -143,18 +152,31 @@ export class BreadcrumbsComponent extends BaseLitElement {
         this.#checkCollapse();
       }
     }
+    if ((changedProperties.has('separatorIconName') || changedProperties.has('siblingRoutesLabel')) && this.#slottedItems.length > 0) {
+      this.#configureSlottedItems();
+    }
   }
 
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
     ForgeResizeObserver.unobserve(this);
+    this.#slottedItems.forEach(item => {
+      item.hidden = false;
+    });
   }
 
   public render(): TemplateResult {
+    const hasConfig = this.crumbs.length > 0;
     return html`
       <nav part="root">
         <ol class="forge-breadcrumbs">
-          ${this.#renderHomeButton()} ${this._collapsed ? this.#renderCollapsed() : this.#renderExpanded()}
+          ${this.#renderHomeButton()}
+          ${hasConfig
+            ? this._collapsed
+              ? this.#renderCollapsed()
+              : this.#renderExpanded()
+            : html`${this._collapsed && this.#slottedItems.length ? this.#renderCollapsedSlotHeader() : nothing}<slot
+                  @slotchange=${this.#handleSlotChange}></slot>`}
         </ol>
       </nav>
     `;
@@ -243,9 +265,94 @@ export class BreadcrumbsComponent extends BaseLitElement {
     if (this._expandedContentWidth > 0 && this._expandedContentWidth > this.#containerWidth) {
       if (!this._collapsed) {
         this._collapsed = true;
+        if (this.#slottedItems.length > 0) {
+          this.#updateSlottedItemVisibility();
+        }
       }
     } else if (this._collapsed) {
       this._collapsed = false;
+      if (this.#slottedItems.length > 0) {
+        this.#updateSlottedItemVisibility();
+      }
+    }
+  }
+
+  async #handleSlotChange(evt: Event): Promise<void> {
+    const slot = evt.target as HTMLSlotElement;
+    const items = slot.assignedElements({ flatten: true }).filter(el => el instanceof BreadcrumbsItemComponent) as BreadcrumbsItemComponent[];
+    this.#slottedItems.forEach(item => {
+      item.hidden = false;
+    });
+    this.#slottedItems = items;
+    if (items.length > 0) {
+      this.#configureSlottedItems();
+    }
+    this._collapsed = false;
+    await this.updateComplete;
+    if (this._listEl) {
+      this._expandedContentWidth = this._listEl.scrollWidth;
+      this.#checkCollapse();
+    }
+  }
+
+  #configureSlottedItems(): void {
+    const items = this.#slottedItems;
+    items.forEach((item, index) => {
+      const isLast = index === items.length - 1;
+      item.index = index;
+      item.active = isLast;
+      item.separator = !isLast ? this.separatorIconName : '';
+      item.siblingRoutesLabel = this.siblingRoutesLabel;
+    });
+  }
+
+  #updateSlottedItemVisibility(): void {
+    const items = this.#slottedItems;
+    if (this._collapsed) {
+      items.forEach((item, index) => {
+        if (index < items.length - 1) {
+          item.hidden = true;
+        }
+      });
+    } else {
+      items.forEach(item => {
+        item.hidden = false;
+      });
+    }
+  }
+
+  #renderCollapsedSlotHeader(): TemplateResult {
+    const collapsedItems = this.#slottedItems.slice(0, -1);
+    const menuOptions: IMenuOption[] = collapsedItems.map((item, index) => ({
+      label: item.crumb.label,
+      value: index,
+      secondaryLabel: item.crumb.secondary,
+      leadingIcon: item.crumb.icon,
+      leadingIconType: 'component'
+    }));
+    return html`
+      <li class="crumb-item">
+        <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleCollapsedSlotMenuSelect}>
+          <forge-icon-button class="collapsed-trigger" aria-label=${this.expandLabel}>
+            <forge-icon name="dots_horizontal"></forge-icon>
+          </forge-icon-button>
+        </forge-menu>
+        ${this.#renderSeparator()}
+      </li>
+    `;
+  }
+
+  #handleCollapsedSlotMenuSelect(evt: CustomEvent): void {
+    const index = evt.detail?.value;
+    if (typeof index === 'number' && index >= 0 && index < this.#slottedItems.length) {
+      const crumb = this.#slottedItems[index].crumb;
+      this.dispatchEvent(
+        new CustomEvent<IBreadcrumbsSelectEventData>(BREADCRUMBS_CONSTANTS.events.CRUMB_SELECT, {
+          bubbles: true,
+          composed: true,
+          detail: { crumb, index }
+        })
+      );
     }
   }
 

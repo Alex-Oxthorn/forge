@@ -1,6 +1,6 @@
 import '$src/shared';
 import '@tylertech/forge/breadcrumbs';
-import type { BreadcrumbsComponent, ICrumbConfiguration } from '@tylertech/forge/breadcrumbs';
+import type { BreadcrumbsComponent, BreadcrumbsItemComponent, ICrumbConfiguration } from '@tylertech/forge/breadcrumbs';
 import type { SwitchComponent } from '@tylertech/forge/switch';
 import type { SelectComponent } from '@tylertech/forge/select';
 import { IconRegistry } from '@tylertech/forge/icon';
@@ -35,7 +35,19 @@ const buildCrumbs = (): ICrumbConfiguration[] =>
         : undefined
   }));
 
-const breadcrumbs = document.querySelectorAll<BreadcrumbsComponent & HTMLElement>('forge-breadcrumbs');
+const breadcrumbs = document.querySelectorAll<BreadcrumbsComponent & HTMLElement>('#demo-breadcrumbs, #demo-breadcrumbs-constrained');
+
+const slotCrumbs: ICrumbConfiguration[] = [
+  { label: 'Section 1', path: '/' },
+  { label: 'Section 2', path: '/projects' },
+  { label: 'Section 3', path: '/projects/forge' },
+  { label: 'Current' }
+];
+
+const slotItems = Array.from(document.querySelectorAll<BreadcrumbsItemComponent>('#demo-breadcrumbs-slot forge-breadcrumbs-item'));
+slotItems.forEach((item, i) => {
+  item.crumb = slotCrumbs[i];
+});
 
 const updateAll = (): void => {
   const crumbs = buildCrumbs();

@@ -3,6 +3,7 @@ import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 
 import type { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.js';
+import type { BreadcrumbsItemComponent } from './breadcrumbs-item/breadcrumbs-item.js';
 import type { ICrumbConfiguration, IBreadcrumbsSelectEventData } from './breadcrumbs/breadcrumbs-constants.js';
 import { frame } from '../core/utils/utils.js';
 
@@ -437,5 +438,117 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
 
     expect(el.siblingRoutesLabel).toBe('Related routes');
+  });
+
+  describe('Slot-based usage', () => {
+    it('should render slotted forge-breadcrumbs-item elements when provided declaratively', async () => {
+      const screen = render(html`
+        <forge-breadcrumbs>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Home', path: '/' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Projects', path: '/projects' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Components' }}></forge-breadcrumbs-item>
+        </forge-breadcrumbs>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+
+      const slottedItems = screen.container.querySelectorAll('forge-breadcrumbs-item');
+      expect(slottedItems.length).toBe(3);
+    });
+
+    it('should set active on the last slotted item', async () => {
+      const screen = render(html`
+        <forge-breadcrumbs>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Home', path: '/' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Components' }}></forge-breadcrumbs-item>
+        </forge-breadcrumbs>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+
+      const slottedItems = Array.from(screen.container.querySelectorAll('forge-breadcrumbs-item')) as BreadcrumbsItemComponent[];
+      expect(slottedItems[0].active).toBe(false);
+      expect(slottedItems[1].active).toBe(true);
+    });
+
+    it('should set the separator on non-last slotted items', async () => {
+      const screen = render(html`
+        <forge-breadcrumbs>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Home', path: '/' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Components' }}></forge-breadcrumbs-item>
+        </forge-breadcrumbs>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+
+      const slottedItems = Array.from(screen.container.querySelectorAll('forge-breadcrumbs-item')) as BreadcrumbsItemComponent[];
+      expect(slottedItems[0].separator).toBe('slash_forward');
+      expect(slottedItems[1].separator).toBe('');
+    });
+
+    it('should set the index on each slotted item', async () => {
+      const screen = render(html`
+        <forge-breadcrumbs>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Home', path: '/' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Projects', path: '/projects' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Components' }}></forge-breadcrumbs-item>
+        </forge-breadcrumbs>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+
+      const slottedItems = Array.from(screen.container.querySelectorAll('forge-breadcrumbs-item')) as BreadcrumbsItemComponent[];
+      expect(slottedItems[0].index).toBe(0);
+      expect(slottedItems[1].index).toBe(1);
+      expect(slottedItems[2].index).toBe(2);
+    });
+
+    it('should update the separator on slotted items when separator-icon-name changes', async () => {
+      const screen = render(html`
+        <forge-breadcrumbs>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Home', path: '/' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Components' }}></forge-breadcrumbs-item>
+        </forge-breadcrumbs>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+
+      el.separatorIconName = 'chevron_right';
+      await el.updateComplete;
+
+      const slottedItems = Array.from(screen.container.querySelectorAll('forge-breadcrumbs-item')) as BreadcrumbsItemComponent[];
+      expect(slottedItems[0].separator).toBe('chevron_right');
+    });
+
+    it('should show collapsed trigger when slotted content overflows container width', async () => {
+      const container = document.createElement('div');
+      container.style.width = '150px';
+      container.style.overflow = 'hidden';
+      document.body.appendChild(container);
+
+      const screen = render(
+        html`
+          <forge-breadcrumbs>
+            <forge-breadcrumbs-item .crumb=${{ label: 'Level 1', path: '/1' }}></forge-breadcrumbs-item>
+            <forge-breadcrumbs-item .crumb=${{ label: 'Level 2', path: '/2' }}></forge-breadcrumbs-item>
+            <forge-breadcrumbs-item .crumb=${{ label: 'Level 3', path: '/3' }}></forge-breadcrumbs-item>
+            <forge-breadcrumbs-item .crumb=${{ label: 'Level 4', path: '/4' }}></forge-breadcrumbs-item>
+            <forge-breadcrumbs-item .crumb=${{ label: 'Level 5', path: '/5' }}></forge-breadcrumbs-item>
+            <forge-breadcrumbs-item .crumb=${{ label: 'Current Page' }}></forge-breadcrumbs-item>
+          </forge-breadcrumbs>
+        `,
+        { container }
+      );
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+      await frame();
+      await frame();
+      await el.updateComplete;
+
+      const collapsedTrigger = el.shadowRoot!.querySelector('.collapsed-trigger');
+      expect(collapsedTrigger).not.toBeNull();
+
+      container.remove();
+    });
   });
 });
