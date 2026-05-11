@@ -29,6 +29,10 @@
   @include crumb-item;
 }
 
+.icons {
+  display: none;
+}
+
 [hidden] {
   display: none;
 }

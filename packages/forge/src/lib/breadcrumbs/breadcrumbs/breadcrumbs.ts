@@ -54,6 +54,7 @@ export interface IBreadcrumbsSelectEventData {
  * @dependency forge-tooltip
  *
  * @slot - Slot for declaratively provided forge-breadcrumbs-item elements.
+ * @slot separator-icon - A custom separator icon to render between breadcrumb items.
  *
  * @property {string} [homeTooltip='Home'] - The tooltip text for the home button.
  * @attribute {string} [home-tooltip='Home'] - The tooltip text for the home button.
@@ -140,6 +141,8 @@ export class BreadcrumbsComponent extends BaseLitElement {
   #internals: ElementInternals;
   #containerWidth = Infinity;
   #slottedItems: BreadcrumbsItemComponent[] = [];
+  #separatorIconSource?: Element;
+  #separatorIconObserver?: MutationObserver;
 
   constructor() {
     super();
@@ -174,6 +177,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
   public override disconnectedCallback(): void {
     super.disconnectedCallback();
     ForgeResizeObserver.unobserve(this);
+    this.#separatorIconObserver?.disconnect();
     this.#slottedItems.forEach(item => {
       item.hidden = false;
     });
@@ -193,6 +197,9 @@ export class BreadcrumbsComponent extends BaseLitElement {
                   @slotchange=${this.#handleSlotChange}></slot>`}
         </ol>
       </nav>
+      <div class="icons">
+        <slot name="separator-icon" @slotchange=${this.#detectSlottedSeparatorIcon}></slot>
+      </div>
     `;
   }
 
@@ -211,7 +218,10 @@ export class BreadcrumbsComponent extends BaseLitElement {
     `;
   }
 
-  #renderSeparator(): TemplateResult {
+  #renderSeparator(): TemplateResult | HTMLElement {
+    if (this.#separatorIconSource) {
+      return this.#cloneSeparatorIcon();
+    }
     return html`<forge-icon class="separator" .name=${this.separatorIconName}></forge-icon>`;
   }
 
@@ -224,7 +234,8 @@ export class BreadcrumbsComponent extends BaseLitElement {
             .crumb=${crumb}
             .index=${index}
             ?active=${isLast}
-            .separator=${!isLast ? this.separatorIconName : ''}
+            .separator=${!isLast && !this.#separatorIconSource ? this.separatorIconName : ''}
+            .separatorElement=${!isLast && this.#separatorIconSource ? this.#cloneSeparatorIcon() : undefined}
             .siblingRoutesLabel=${this.siblingRoutesLabel}>
           </forge-breadcrumbs-item>
         </li>
@@ -315,7 +326,8 @@ export class BreadcrumbsComponent extends BaseLitElement {
       const isLast = index === items.length - 1;
       item.index = index;
       item.active = isLast;
-      item.separator = !isLast ? this.separatorIconName : '';
+      item.separator = !isLast && !this.#separatorIconSource ? this.separatorIconName : '';
+      item.separatorElement = !isLast && this.#separatorIconSource ? this.#cloneSeparatorIcon() : undefined;
       item.siblingRoutesLabel = this.siblingRoutesLabel;
     });
   }
@@ -391,6 +403,37 @@ export class BreadcrumbsComponent extends BaseLitElement {
         })
       );
     }
+  }
+
+  #detectSlottedSeparatorIcon(evt: Event): void {
+    const slot = evt.target as HTMLSlotElement;
+    const assignedElement = slot.assignedElements()[0];
+
+    if (!assignedElement) {
+      this.#separatorIconSource = undefined;
+      this.#separatorIconObserver?.disconnect();
+      this.#separatorIconObserver = undefined;
+    } else {
+      this.#separatorIconObserver ??= new MutationObserver(() => {
+        if (this.#slottedItems.length > 0) {
+          this.#configureSlottedItems();
+        }
+        this.requestUpdate();
+      });
+      this.#separatorIconObserver.observe(assignedElement, { attributes: true, subtree: true, childList: true, characterData: true });
+      this.#separatorIconSource = assignedElement;
+    }
+
+    if (this.#slottedItems.length > 0) {
+      this.#configureSlottedItems();
+    }
+    this.requestUpdate();
+  }
+
+  #cloneSeparatorIcon(): HTMLElement {
+    const clone = (this.#separatorIconSource as Element).cloneNode(true) as HTMLElement;
+    [clone, ...clone.querySelectorAll('[id]')].forEach(el => el.removeAttribute('id'));
+    return clone;
   }
 }
 

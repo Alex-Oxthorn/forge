@@ -50,6 +50,9 @@ slotItems.forEach((item, i) => {
   item.crumb = slotCrumbs[i];
 });
 
+const customSepBreadcrumbs = document.getElementById('demo-breadcrumbs-custom-sep') as BreadcrumbsComponent & HTMLElement;
+customSepBreadcrumbs.crumbs = baseCrumbs;
+
 const updateAll = (): void => {
   const crumbs = buildCrumbs();
   breadcrumbs.forEach(bc => {

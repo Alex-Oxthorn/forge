@@ -550,4 +550,92 @@ describe('Breadcrumb', () => {
       container.remove();
     });
   });
+
+  describe('Custom separator-icon slot', () => {
+    it('should render the slotted separator element instead of a forge-icon in each non-last crumb', async () => {
+      const screen = render(html`
+        <forge-breadcrumbs .crumbs=${basicCrumbs}>
+          <span slot="separator-icon" class="custom-sep">/</span>
+        </forge-breadcrumbs>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+      await frame();
+      await el.updateComplete;
+
+      const crumbEls = Array.from(el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item'));
+      const nonLastCrumbs = crumbEls.slice(0, -1);
+      expect(nonLastCrumbs.length).toBeGreaterThan(0);
+
+      for (const crumb of nonLastCrumbs) {
+        await crumb.updateComplete;
+        const customSep = crumb.shadowRoot!.querySelector('.custom-sep');
+        expect(customSep).not.toBeNull();
+        const forgeSep = crumb.shadowRoot!.querySelector('forge-icon.separator');
+        expect(forgeSep).toBeNull();
+      }
+    });
+
+    it('should not render the slotted separator on the last crumb', async () => {
+      const screen = render(html`
+        <forge-breadcrumbs .crumbs=${basicCrumbs}>
+          <span slot="separator-icon" class="custom-sep">/</span>
+        </forge-breadcrumbs>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+
+      const crumbEls = Array.from(el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item'));
+      const lastCrumb = crumbEls[crumbEls.length - 1];
+      await lastCrumb.updateComplete;
+
+      const customSep = lastCrumb.shadowRoot!.querySelector('.custom-sep');
+      expect(customSep).toBeNull();
+    });
+
+    it('should fall back to forge-icon separator when the separator-icon slot is removed', async () => {
+      const customSep = document.createElement('span');
+      customSep.slot = 'separator-icon';
+      customSep.className = 'custom-sep';
+      customSep.textContent = '/';
+
+      const screen = render(html`<forge-breadcrumbs .crumbs=${basicCrumbs}></forge-breadcrumbs>`);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      el.appendChild(customSep);
+      await el.updateComplete;
+      await frame();
+
+      el.removeChild(customSep);
+      await el.updateComplete;
+      await frame();
+
+      const crumbEls = Array.from(el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item'));
+      const firstCrumb = crumbEls[0];
+      await firstCrumb.updateComplete;
+
+      const forgeSep = firstCrumb.shadowRoot!.querySelector('forge-icon.separator');
+      expect(forgeSep).not.toBeNull();
+    });
+
+    it('should propagate slotted separator to declarative slot-based items', async () => {
+      const screen = render(html`
+        <forge-breadcrumbs>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Home', path: '/' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Projects', path: '/projects' }}></forge-breadcrumbs-item>
+          <forge-breadcrumbs-item .crumb=${{ label: 'Current' }}></forge-breadcrumbs-item>
+          <span slot="separator-icon" class="custom-sep">/</span>
+        </forge-breadcrumbs>
+      `);
+      const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
+      await el.updateComplete;
+      await frame();
+
+      const slottedItems = Array.from(screen.container.querySelectorAll('forge-breadcrumbs-item')) as BreadcrumbsItemComponent[];
+      const firstItem = slottedItems[0];
+      await firstItem.updateComplete;
+
+      const customSep = firstItem.shadowRoot!.querySelector('.custom-sep');
+      expect(customSep).not.toBeNull();
+    });
+  });
 });

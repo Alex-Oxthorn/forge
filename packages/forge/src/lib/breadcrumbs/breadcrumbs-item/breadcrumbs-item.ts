@@ -45,6 +45,9 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
   @property()
   public separator = '';
 
+  @property({ attribute: false })
+  public separatorElement?: HTMLElement;
+
   @property({ attribute: 'sibling-routes-label' })
   public siblingRoutesLabel = 'Sibling routes';
 
@@ -72,8 +75,14 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
     `;
   }
 
-  #renderSeparator(): TemplateResult | typeof nothing {
-    if (!this.separator || this.active) {
+  #renderSeparator(): TemplateResult | HTMLElement | typeof nothing {
+    if (this.active) {
+      return nothing;
+    }
+    if (this.separatorElement) {
+      return this.separatorElement;
+    }
+    if (!this.separator) {
       return nothing;
     }
     return html`<forge-icon class="separator" .name=${this.separator}></forge-icon>`;
