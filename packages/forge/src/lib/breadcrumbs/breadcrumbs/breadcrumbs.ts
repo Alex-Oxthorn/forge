@@ -14,10 +14,10 @@ import '../../icon/icon.js';
 import '../../icon-button/icon-button.js';
 import '../../menu/menu.js';
 import '../../tooltip/tooltip.js';
-import '../crumb/crumb.js';
+import '../breadcrumbs-item/breadcrumbs-item.js';
 
 import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS, BREADCRUMBS_TAG_NAME } from './breadcrumbs-constants.js';
-import { CrumbComponent } from '../crumb/crumb.js';
+import { BreadcrumbsItemComponent } from '../breadcrumbs-item/breadcrumbs-item.js';
 import type { IMenuOption } from '../../menu/menu-constants.js';
 
 import styles from './breadcrumbs.scss';
@@ -63,7 +63,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
   public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BREADCRUMBS_TAG_NAME;
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [CrumbComponent, IconButtonComponent, IconComponent, MenuComponent, TooltipComponent];
+  public static [CUSTOM_ELEMENT_DEPENDENCIES_PROPERTY] = [BreadcrumbsItemComponent, IconButtonComponent, IconComponent, MenuComponent, TooltipComponent];
 
   /**
    * The breadcrumb items to render.
@@ -185,13 +185,13 @@ export class BreadcrumbsComponent extends BaseLitElement {
       const isLast = index === this.crumbs.length - 1;
       return html`
         <li class="forge-breadcrumbs__crumb-item">
-          <forge-crumb
+          <forge-breadcrumbs-item
             .crumb=${crumb}
             .index=${index}
             ?active=${isLast}
             .separator=${!isLast ? this.separatorIconName : ''}
             .siblingRoutesLabel=${this.siblingRoutesLabel}>
-          </forge-crumb>
+          </forge-breadcrumbs-item>
         </li>
       `;
     });
@@ -221,7 +221,8 @@ export class BreadcrumbsComponent extends BaseLitElement {
       ${lastCrumb
         ? html`
             <li class="forge-breadcrumbs__crumb-item">
-              <forge-crumb .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active .siblingRoutesLabel=${this.siblingRoutesLabel}> </forge-crumb>
+              <forge-breadcrumbs-item .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active .siblingRoutesLabel=${this.siblingRoutesLabel}>
+              </forge-breadcrumbs-item>
             </li>
           `
         : nothing}

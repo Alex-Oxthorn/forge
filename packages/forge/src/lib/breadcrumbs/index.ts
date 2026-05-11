@@ -1,12 +1,12 @@
 import { defineCustomElement } from '@tylertech/forge-core';
 
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.js';
-import { CrumbComponent } from './crumb/crumb.js';
+import { BreadcrumbsItemComponent } from './breadcrumbs-item/breadcrumbs-item.js';
 
 export * from './breadcrumbs/breadcrumbs.js';
 export * from './breadcrumbs/breadcrumbs-constants.js';
-export * from './crumb/crumb.js';
-export * from './crumb/crumb-constants.js';
+export * from './breadcrumbs-item/breadcrumbs-item.js';
+export * from './breadcrumbs-item/breadcrumbs-item-constants.js';
 
 /** @deprecated Definition functions are deprecated and replaced with side effect imports (`import '@tylertech/forge/breadcrumbs'`). */
 export function defineBreadcrumbsComponent(): void {
@@ -14,6 +14,6 @@ export function defineBreadcrumbsComponent(): void {
 }
 
 /** @deprecated Definition functions are deprecated and replaced with side effect imports (`import '@tylertech/forge/breadcrumbs'`). */
-export function defineCrumbComponent(): void {
-  defineCustomElement(CrumbComponent);
+export function defineBreadcrumbsItemComponent(): void {
+  defineCustomElement(BreadcrumbsItemComponent);
 }

@@ -11,12 +11,12 @@
   display: none;
 }
 
-.forge-crumb {
+.forge-breadcrumbs-item {
   @include tokens;
   @include base;
 }
 
-.forge-crumb__link {
+.forge-breadcrumbs-item__link {
   @include link;
 
   forge-state-layer {
@@ -38,27 +38,27 @@ forge-focus-indicator {
   );
 }
 
-.forge-crumb__label-text {
+.forge-breadcrumbs-item__label-text {
   @include label-text;
 }
 
-.forge-crumb__secondary-text {
+.forge-breadcrumbs-item__secondary-text {
   @include secondary-text;
 }
 
-.forge-crumb__icon {
+.forge-breadcrumbs-item__icon {
   @include crumb-icon;
 }
 
-.forge-crumb__sibling-trigger {
+.forge-breadcrumbs-item__sibling-trigger {
   @include sibling-trigger;
 }
 
-.forge-crumb__active {
+.forge-breadcrumbs-item__active {
   @include active;
 }
 
-.forge-crumb__separator {
+.forge-breadcrumbs-item__separator {
   @include separator;
 }
 

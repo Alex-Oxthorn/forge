@@ -12,17 +12,17 @@ import '../../menu/menu.js';
 import '../../state-layer/state-layer.js';
 
 import { ICrumbConfiguration, IBreadcrumbsSelectEventData, BREADCRUMBS_CONSTANTS } from '../breadcrumbs/breadcrumbs-constants.js';
-import { CRUMB_TAG_NAME } from './crumb-constants.js';
+import { BREADCRUMBS_ITEM_TAG_NAME } from './breadcrumbs-item-constants.js';
 import type { IMenuOption } from '../../menu/menu-constants.js';
 
-import styles from './crumb.scss';
+import styles from './breadcrumbs-item.scss';
 
 /**
- * @tag forge-crumb
+ * @tag forge-breadcrumbs-item
  * @summary An individual crumb item within a breadcrumb navigation.
  */
-@customElement(CRUMB_TAG_NAME)
-export class CrumbComponent extends BaseLitElement {
+@customElement(BREADCRUMBS_ITEM_TAG_NAME)
+export class BreadcrumbsItemComponent extends BaseLitElement {
   static {
     IconRegistry.define([tylIconArrowDropDown]);
   }
@@ -30,7 +30,7 @@ export class CrumbComponent extends BaseLitElement {
   public static styles = unsafeCSS(styles);
 
   /** @deprecated Used for compatibility with legacy Forge @customElement decorator. */
-  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = CRUMB_TAG_NAME;
+  public static [CUSTOM_ELEMENT_NAME_PROPERTY] = BREADCRUMBS_ITEM_TAG_NAME;
 
   @property({ attribute: false })
   public crumb: ICrumbConfiguration = { label: '' };
@@ -48,25 +48,25 @@ export class CrumbComponent extends BaseLitElement {
   public siblingRoutesLabel = 'Sibling routes';
 
   public render(): TemplateResult {
-    return html` <div class="forge-crumb">${this.#renderContent()} ${this.#renderSiblingTrigger()} ${this.#renderSeparator()}</div> `;
+    return html` <div class="forge-breadcrumbs-item">${this.#renderContent()} ${this.#renderSiblingTrigger()} ${this.#renderSeparator()}</div> `;
   }
 
   #renderContent(): TemplateResult {
     if (this.active || !this.crumb.path) {
       return html`
-        <span class="forge-crumb__active" aria-current=${this.active ? 'page' : nothing}>
-          <span class="forge-crumb__label-text">${this.crumb.label}</span>
+        <span class="forge-breadcrumbs-item__active" aria-current=${this.active ? 'page' : nothing}>
+          <span class="forge-breadcrumbs-item__label-text">${this.crumb.label}</span>
         </span>
       `;
     }
 
     return html`
-      <button class="forge-crumb__link" type="button" @click=${this.#handleClick}>
+      <button class="forge-breadcrumbs-item__link" type="button" @click=${this.#handleClick}>
         <forge-state-layer></forge-state-layer>
         <forge-focus-indicator></forge-focus-indicator>
-        ${this.crumb.icon ? html`<forge-icon class="forge-crumb__icon" .name=${this.crumb.icon}></forge-icon>` : nothing}
-        <span class="forge-crumb__label-text">${this.crumb.label}</span>
-        ${this.crumb.secondary ? html`<span class="forge-crumb__secondary-text">${this.crumb.secondary}</span>` : nothing}
+        ${this.crumb.icon ? html`<forge-icon class="forge-breadcrumbs-item__icon" .name=${this.crumb.icon}></forge-icon>` : nothing}
+        <span class="forge-breadcrumbs-item__label-text">${this.crumb.label}</span>
+        ${this.crumb.secondary ? html`<span class="forge-breadcrumbs-item__secondary-text">${this.crumb.secondary}</span>` : nothing}
       </button>
     `;
   }
@@ -75,7 +75,7 @@ export class CrumbComponent extends BaseLitElement {
     if (!this.separator || this.active) {
       return nothing;
     }
-    return html`<forge-icon class="forge-crumb__separator" .name=${this.separator}></forge-icon>`;
+    return html`<forge-icon class="forge-breadcrumbs-item__separator" .name=${this.separator}></forge-icon>`;
   }
 
   #renderSiblingTrigger(): TemplateResult | typeof nothing {
@@ -93,7 +93,7 @@ export class CrumbComponent extends BaseLitElement {
 
     return html`
       <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleSiblingSelect} dense>
-        <forge-icon-button class="forge-crumb__sibling-trigger" aria-label=${this.siblingRoutesLabel}>
+        <forge-icon-button class="forge-breadcrumbs-item__sibling-trigger" aria-label=${this.siblingRoutesLabel}>
           <forge-icon name="arrow_drop_down"></forge-icon>
         </forge-icon-button>
       </forge-menu>
@@ -129,6 +129,6 @@ export class CrumbComponent extends BaseLitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'forge-crumb': CrumbComponent;
+    'forge-breadcrumbs-item': BreadcrumbsItemComponent;
   }
 }

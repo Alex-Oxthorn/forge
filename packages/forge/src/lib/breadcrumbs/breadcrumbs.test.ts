@@ -7,7 +7,7 @@ import type { ICrumbConfiguration, IBreadcrumbsSelectEventData } from './breadcr
 import { frame } from '../core/utils/utils.js';
 
 import './breadcrumbs/breadcrumbs.js';
-import './crumb/crumb.js';
+import './breadcrumbs-item/breadcrumbs-item.js';
 
 const basicCrumbs: ICrumbConfiguration[] = [{ label: 'Home', path: '/' }, { label: 'Projects', path: '/projects' }, { label: 'Components' }];
 
@@ -32,7 +32,7 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const crumbEls = el.shadowRoot!.querySelectorAll('forge-crumb');
+    const crumbEls = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item');
     expect(crumbEls.length).toBe(basicCrumbs.length);
   });
 
@@ -41,7 +41,7 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const crumbEls = el.shadowRoot!.querySelectorAll('forge-crumb');
+    const crumbEls = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item');
     const lastCrumb = crumbEls[crumbEls.length - 1];
     await lastCrumb.updateComplete;
     const activeLi = lastCrumb.shadowRoot!.querySelector('[aria-current="page"]');
@@ -88,10 +88,10 @@ describe('Breadcrumb', () => {
     const spy = vi.fn();
     el.addEventListener('forge-breadcrumbs-crumb-select', spy);
 
-    const crumbEls = el.shadowRoot!.querySelectorAll('forge-crumb');
+    const crumbEls = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item');
     const firstCrumb = crumbEls[0];
     await firstCrumb.updateComplete;
-    const link = firstCrumb.shadowRoot!.querySelector('.forge-crumb__link') as HTMLElement;
+    const link = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__link') as HTMLElement;
     link.click();
 
     expect(spy).toHaveBeenCalledOnce();
@@ -105,13 +105,13 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const crumbEls = el.shadowRoot!.querySelectorAll('forge-crumb');
+    const crumbEls = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item');
     const nonLastCrumbs = Array.from(crumbEls).slice(0, -1);
     expect(nonLastCrumbs.length).toBeGreaterThan(0);
 
     for (const crumb of nonLastCrumbs) {
       await crumb.updateComplete;
-      const sep = crumb.shadowRoot!.querySelector('.forge-crumb__separator') as any;
+      const sep = crumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__separator') as any;
       expect(sep).not.toBeNull();
       expect(sep.name).toBe('chevron_right');
     }
@@ -123,9 +123,9 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const icon = firstCrumb.shadowRoot!.querySelector('.forge-crumb__icon');
+    const icon = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__icon');
     expect(icon).not.toBeNull();
   });
 
@@ -135,9 +135,9 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const secondary = firstCrumb.shadowRoot!.querySelector('.forge-crumb__secondary-text');
+    const secondary = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__secondary-text');
     expect(secondary).not.toBeNull();
     expect(secondary!.textContent).toBe('Main page');
   });
@@ -158,9 +158,9 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-crumb__sibling-trigger');
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__sibling-trigger');
     expect(siblingTrigger).not.toBeNull();
   });
 
@@ -169,9 +169,9 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-crumb__sibling-trigger');
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__sibling-trigger');
     expect(siblingTrigger).toBeNull();
   });
 
@@ -194,7 +194,7 @@ describe('Breadcrumb', () => {
     const spy = vi.fn();
     el.addEventListener('forge-breadcrumbs-crumb-select', spy);
 
-    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
 
     const menu = firstCrumb.shadowRoot!.querySelector('forge-menu')!;
@@ -407,9 +407,9 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-crumb__sibling-trigger');
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__sibling-trigger');
     expect(siblingTrigger!.getAttribute('aria-label')).toBe('Sibling routes');
   });
 
@@ -426,9 +426,9 @@ describe('Breadcrumb', () => {
     const el = screen.container.querySelector('forge-breadcrumbs') as BreadcrumbsComponent;
     await el.updateComplete;
 
-    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-crumb')[0];
+    const firstCrumb = el.shadowRoot!.querySelectorAll('forge-breadcrumbs-item')[0];
     await firstCrumb.updateComplete;
-    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-crumb__sibling-trigger');
+    const siblingTrigger = firstCrumb.shadowRoot!.querySelector('.forge-breadcrumbs-item__sibling-trigger');
     expect(siblingTrigger!.getAttribute('aria-label')).toBe('Verwandte Routen');
   });
 

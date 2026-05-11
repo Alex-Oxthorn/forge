@@ -21,7 +21,7 @@ import { defineAvatarComponent } from './avatar/index.js';
 import { defineBackdropComponent } from './backdrop/index.js';
 import { defineBadgeComponent } from './badge/index.js';
 import { defineBannerComponent } from './banner/index.js';
-import { defineBreadcrumbsComponent, defineCrumbComponent } from './breadcrumbs/index.js';
+import { defineBreadcrumbsComponent, defineBreadcrumbsItemComponent } from './breadcrumbs/index.js';
 import { defineBottomSheetComponent } from './bottom-sheet/index.js';
 import { defineButtonAreaComponent } from './button-area/index.js';
 import { defineButtonToggleComponent, defineButtonToggleGroupComponent } from './button-toggle/index.js';
@@ -183,7 +183,7 @@ export function defineComponents(): void {
   defineBadgeComponent();
   defineBannerComponent();
   defineBreadcrumbsComponent();
-  defineCrumbComponent();
+  defineBreadcrumbsItemComponent();
   defineBottomSheetComponent();
   defineButtonAreaComponent();
   defineButtonComponent();

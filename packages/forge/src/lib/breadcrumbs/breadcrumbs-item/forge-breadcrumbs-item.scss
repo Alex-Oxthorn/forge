@@ -1,6 +1,6 @@
 @use './core';
 
-.forge-crumb {
+.forge-breadcrumbs-item {
   @include core.tokens;
   @include core.host;
   @include core.base;
