@@ -7,6 +7,7 @@ import { IconRegistry } from '@tylertech/forge/icon';
 import { tylIconFolder, tylIconDescription, tylIconSettings, tylIconHome, tylIconChevronRight, tylIconArrowRight } from '@tylertech/tyler-icons';
 
 import './breadcrumbs.scss';
+import { ButtonComponent } from '@tylertech/forge/button';
 
 IconRegistry.define([tylIconFolder, tylIconDescription, tylIconSettings, tylIconHome, tylIconChevronRight, tylIconArrowRight]);
 
@@ -63,68 +64,54 @@ const separatorSelect = document.getElementById('opt-separator') as SelectCompon
 const iconsSwitch = document.getElementById('opt-icons') as SwitchComponent;
 const secondarySwitch = document.getElementById('opt-secondary') as SwitchComponent;
 const siblingsSwitch = document.getElementById('opt-siblings') as SwitchComponent;
-const addBtn = document.getElementById('btn-add-crumb');
-const removeBtn = document.getElementById('btn-remove-crumb');
+const addBtn = document.getElementById('btn-add-crumb') as ButtonComponent;
+const removeBtn = document.getElementById('btn-remove-crumb') as ButtonComponent;
 
 iconsSwitch.checked = showIcons;
 secondarySwitch.checked = showSecondary;
 siblingsSwitch.checked = showSiblings;
 
-if (showHomeSwitch) {
-  showHomeSwitch.addEventListener('forge-switch-change', () => {
-    breadcrumbs.forEach(bc => {
-      bc.showHome = showHomeSwitch.checked;
-    });
+showHomeSwitch.addEventListener('forge-switch-change', () => {
+  breadcrumbs.forEach(bc => {
+    bc.showHome = showHomeSwitch.checked;
   });
-}
+});
 
-if (separatorSelect) {
-  separatorSelect.addEventListener('change', () => {
-    breadcrumbs.forEach(bc => {
-      bc.separatorIconName = separatorSelect.value;
-    });
+separatorSelect.addEventListener('change', () => {
+  breadcrumbs.forEach(bc => {
+    bc.separatorIconName = separatorSelect.value;
   });
-}
+});
 
-if (iconsSwitch) {
-  iconsSwitch.addEventListener('forge-switch-change', () => {
-    showIcons = iconsSwitch.checked;
+iconsSwitch.addEventListener('forge-switch-change', () => {
+  showIcons = iconsSwitch.checked;
+  updateAll();
+});
+
+secondarySwitch.addEventListener('forge-switch-change', () => {
+  showSecondary = secondarySwitch.checked;
+  updateAll();
+});
+
+siblingsSwitch.addEventListener('forge-switch-change', () => {
+  showSiblings = siblingsSwitch.checked;
+  updateAll();
+});
+
+addBtn.addEventListener('click', () => {
+  baseCrumbs.splice(baseCrumbs.length - 1, 0, {
+    label: `Section ${baseCrumbs.length}`,
+    path: `/section-${baseCrumbs.length}`
+  });
+  updateAll();
+});
+
+removeBtn.addEventListener('click', () => {
+  if (baseCrumbs.length > 1) {
+    baseCrumbs.splice(baseCrumbs.length - 2, 1);
     updateAll();
-  });
-}
-
-if (secondarySwitch) {
-  secondarySwitch.addEventListener('forge-switch-change', () => {
-    showSecondary = secondarySwitch.checked;
-    updateAll();
-  });
-}
-
-if (siblingsSwitch) {
-  siblingsSwitch.addEventListener('forge-switch-change', () => {
-    showSiblings = siblingsSwitch.checked;
-    updateAll();
-  });
-}
-
-if (addBtn) {
-  addBtn.addEventListener('click', () => {
-    baseCrumbs.splice(baseCrumbs.length - 1, 0, {
-      label: `Section ${baseCrumbs.length}`,
-      path: `/section-${baseCrumbs.length}`
-    });
-    updateAll();
-  });
-}
-
-if (removeBtn) {
-  removeBtn.addEventListener('click', () => {
-    if (baseCrumbs.length > 1) {
-      baseCrumbs.splice(baseCrumbs.length - 2, 1);
-      updateAll();
-    }
-  });
-}
+  }
+});
 
 window.addEventListener('forge-breadcrumbs-crumb-select', evt => {
   console.log('Crumb selected:', (evt as CustomEvent).detail);
