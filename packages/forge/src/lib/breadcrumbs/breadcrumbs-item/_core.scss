@@ -2,6 +2,7 @@
 @use '../breadcrumbs/token-utils' as breadcrumb-tokens;
 @use '../../icon' as icon;
 @use '../../icon-button' as icon-button;
+@use '../../core/styles/typography';
 
 @forward './token-utils';
 
@@ -18,8 +19,8 @@
 @mixin link {
   color: #{token(text-color)};
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: var(--forge-spacing-xxsmall) var(--forge-spacing-xsmall);
+  border-radius: var(--forge-spacing-xxsmall);
   font: inherit;
   border: none;
   background: none;
@@ -32,6 +33,7 @@
 }
 
 @mixin label-text {
+  @include typography.style(body2);
   white-space: nowrap;
   grid-column-start: 2;
   grid-row-start: 1;
@@ -39,7 +41,7 @@
 }
 
 @mixin secondary-text {
-  font-size: 0.75rem;
+  @include typography.style(label1);
   color: #{token(secondary-text-color)};
   grid-column-start: 2;
   grid-row-start: 2;
@@ -48,22 +50,22 @@
 
 @mixin crumb-icon {
   color: #{token(icon-theme)};
-  margin-right: 8px;
+  margin-right: var(--forge-spacing-xsmall);
 }
 
 @mixin sibling-trigger {
   @include icon-button.provide-theme(
     (
-      size: 32px
+      size: var(--forge-spacing-xlarge)
     )
   );
 }
 
 @mixin active {
-  padding: 4px 8px;
+  padding: var(--forge-spacing-xxsmall) var(--forge-spacing-xsmall);
 }
 
 @mixin separator {
   color: #{breadcrumb-tokens.token(separator-theme)};
-  padding-top: 4px;
+  padding-top: var(--forge-spacing-xxsmall);
 }

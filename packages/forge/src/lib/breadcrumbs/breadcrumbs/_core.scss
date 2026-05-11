@@ -21,14 +21,14 @@
 
 @mixin separator {
   color: #{token(separator-theme)};
-  padding-top: 4px;
+  padding-top: var(--forge-spacing-xxsmall);
 }
 
 @mixin home-button {
   @include icon-button.provide-theme(
     (
       icon-color: theme.variable(primary),
-      size: 32px
+      size: var(--forge-spacing-xlarge)
     )
   );
 }
@@ -37,7 +37,7 @@
   @include icon-button.provide-theme(
     (
       icon-color: theme.variable(primary),
-      size: 32px
+      size: var(--forge-spacing-xlarge)
     )
   );
 }

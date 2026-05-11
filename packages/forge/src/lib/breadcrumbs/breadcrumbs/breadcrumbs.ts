@@ -255,7 +255,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
       return;
     }
 
-    ForgeResizeObserver.observe(this, entry => {
+    ForgeResizeObserver.observe(this, (entry: ResizeObserverEntry) => {
       this.#containerWidth = entry.contentRect.width;
       this.#checkCollapse();
     });
