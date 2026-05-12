@@ -41,7 +41,7 @@ export interface ICrumbConfiguration {
  * hierarchical structure. It supports icons, secondary text, sibling route navigation, and
  * automatically collapses into a menu when the container width is insufficient.
  *
- * @csspart root - The root navigation element.
+ * @csspart root - The root list element.
  *
  * @cssproperty --forge-breadcrumbs-gap - The gap between breadcrumb items.
  * @cssproperty --forge-breadcrumbs-separator-color - The color theme for separator icons.
@@ -151,7 +151,7 @@ export class BreadcrumbsComponent extends BaseLitElement {
   }
 
   public override firstUpdated(): void {
-    setDefaultAria(this, this.#internals, { role: 'navigation', ariaLabel: 'Breadcrumbs' });
+    setDefaultAria(this, this.#internals, { role: 'list', ariaLabel: 'Breadcrumbs' });
     this.#setupResizeObserver();
   }
 
@@ -187,17 +187,15 @@ export class BreadcrumbsComponent extends BaseLitElement {
   public render(): TemplateResult {
     const hasConfig = this.crumbs.length > 0;
     return html`
-      <nav part="root">
-        <ol class="forge-breadcrumbs">
-          ${this.#renderHomeButton()}
-          ${hasConfig
-            ? this._collapsed
-              ? this.#renderCollapsed()
-              : this.#renderExpanded()
-            : html`${this._collapsed && this.#slottedItems.length ? this.#renderCollapsedSlotHeader() : nothing}<slot
-                  @slotchange=${this.#handleSlotChange}></slot>`}
-        </ol>
-      </nav>
+      <div part="root" class="forge-breadcrumbs" @forge-breadcrumbs-crumb-select=${this.#handleCrumbSelect}>
+        ${this.#renderHomeButton()}
+        ${hasConfig
+          ? this._collapsed
+            ? this.#renderCollapsed()
+            : this.#renderExpanded()
+          : html`${this._collapsed && this.#slottedItems.length ? this.#renderCollapsedSlotHeader() : nothing}<slot
+                @slotchange=${this.#handleSlotChange}></slot>`}
+      </div>
       <div class="icons">
         <slot name="separator-icon" @slotchange=${this.#detectSlottedSeparatorIcon}></slot>
       </div>
@@ -209,13 +207,13 @@ export class BreadcrumbsComponent extends BaseLitElement {
       return nothing;
     }
     return html`
-      <li class="crumb-item">
+      <div role="listitem" class="crumb-item">
         <forge-icon-button class="home-button" aria-label=${this.homeTooltip} @click=${this.#handleHomeClick}>
           <forge-icon name="home"></forge-icon>
         </forge-icon-button>
         <forge-tooltip>${this.homeTooltip}</forge-tooltip>
         ${this.#renderSeparator()}
-      </li>
+      </div>
     `;
   }
 
@@ -230,16 +228,14 @@ export class BreadcrumbsComponent extends BaseLitElement {
     return this.crumbs.map((crumb, index) => {
       const isLast = index === this.crumbs.length - 1;
       return html`
-        <li class="crumb-item">
-          <forge-breadcrumbs-item
-            .crumb=${crumb}
-            .index=${index}
-            ?active=${isLast}
-            .separator=${!isLast && !this.#separatorIconSource ? this.separatorIconName : ''}
-            .separatorElement=${!isLast && this.#separatorIconSource ? this.#cloneSeparatorIcon() : undefined}
-            .siblingRoutesLabel=${this.siblingRoutesLabel}>
-          </forge-breadcrumbs-item>
-        </li>
+        <forge-breadcrumbs-item
+          .crumb=${crumb}
+          .index=${index}
+          ?active=${isLast}
+          .separator=${!isLast && !this.#separatorIconSource ? this.separatorIconName : ''}
+          .separatorElement=${!isLast && this.#separatorIconSource ? this.#cloneSeparatorIcon() : undefined}
+          .siblingRoutesLabel=${this.siblingRoutesLabel}>
+        </forge-breadcrumbs-item>
       `;
     });
   }
@@ -257,20 +253,18 @@ export class BreadcrumbsComponent extends BaseLitElement {
     }));
 
     return html`
-      <li class="crumb-item">
+      <div role="listitem" class="crumb-item">
         <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleCollapsedMenuSelect}>
           <forge-icon-button class="collapsed-trigger" aria-label=${this.expandLabel}>
             <forge-icon name="dots_horizontal"></forge-icon>
           </forge-icon-button>
         </forge-menu>
         ${this.#renderSeparator()}
-      </li>
+      </div>
       ${lastCrumb
         ? html`
-            <li class="crumb-item">
-              <forge-breadcrumbs-item .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active .siblingRoutesLabel=${this.siblingRoutesLabel}>
-              </forge-breadcrumbs-item>
-            </li>
+            <forge-breadcrumbs-item .crumb=${lastCrumb} .index=${this.crumbs.length - 1} active .siblingRoutesLabel=${this.siblingRoutesLabel}>
+            </forge-breadcrumbs-item>
           `
         : nothing}
     `;
@@ -358,14 +352,14 @@ export class BreadcrumbsComponent extends BaseLitElement {
       leadingIconType: 'component'
     }));
     return html`
-      <li class="crumb-item">
+      <div role="listitem" class="crumb-item">
         <forge-menu .options=${menuOptions} @forge-menu-select=${this.#handleCollapsedSlotMenuSelect}>
           <forge-icon-button class="collapsed-trigger" aria-label=${this.expandLabel}>
             <forge-icon name="dots_horizontal"></forge-icon>
           </forge-icon-button>
         </forge-menu>
         ${this.#renderSeparator()}
-      </li>
+      </div>
     `;
   }
 
@@ -378,6 +372,13 @@ export class BreadcrumbsComponent extends BaseLitElement {
 
   #handleHomeClick(): void {
     this.dispatchEvent(new Event('forge-breadcrumbs-home-click', { bubbles: true, composed: true }));
+  }
+
+  #handleCrumbSelect(evt: Event): void {
+    const target = evt.target;
+    if (target instanceof BreadcrumbsItemComponent) {
+      this.#selectedIndex = target.index;
+    }
   }
 
   #handleCollapsedMenuSelect(evt: CustomEvent): void {

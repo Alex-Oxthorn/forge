@@ -2,6 +2,7 @@ import { CUSTOM_ELEMENT_NAME_PROPERTY } from '@tylertech/forge-core';
 import { html, nothing, TemplateResult, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseLitElement } from '../../core/base/base-lit-element.js';
+import { setDefaultAria } from '../../core/utils/a11y-utils.js';
 import { IconRegistry } from '../../icon/index.js';
 import { tylIconArrowDropDown } from '@tylertech/tyler-icons';
 
@@ -50,6 +51,17 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
 
   @property({ attribute: 'sibling-routes-label' })
   public siblingRoutesLabel = 'Sibling routes';
+
+  #internals: ElementInternals;
+
+  constructor() {
+    super();
+    this.#internals = this.attachInternals();
+  }
+
+  public override firstUpdated(): void {
+    setDefaultAria(this, this.#internals, { role: 'listitem' });
+  }
 
   public render(): TemplateResult {
     return html` <div class="forge-breadcrumbs-item">${this.#renderContent()} ${this.#renderSiblingTrigger()} ${this.#renderSeparator()}</div> `;
