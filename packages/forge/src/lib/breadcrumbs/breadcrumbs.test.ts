@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from 'vitest-browser-lit';
 import { html } from 'lit';
 
-import type { BreadcrumbsComponent, ICrumbConfiguration, IBreadcrumbsSelectEventData } from './breadcrumbs/breadcrumbs.js';
+import type { BreadcrumbsComponent, ICrumbConfiguration } from './breadcrumbs/breadcrumbs.js';
 import type { BreadcrumbsItemComponent } from './breadcrumbs-item/breadcrumbs-item.js';
 import { frame } from '../core/utils/utils.js';
 
@@ -95,9 +95,8 @@ describe('Breadcrumb', () => {
     link.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    const detail = spy.mock.calls[0][0].detail as IBreadcrumbsSelectEventData;
-    expect(detail.crumb).toEqual(basicCrumbs[0]);
-    expect(detail.index).toBe(0);
+    const evt = spy.mock.calls[0][0] as Event;
+    expect((evt.target as BreadcrumbsItemComponent).index).toBe(0);
   });
 
   it('should render a custom separator icon when separator property is set', async () => {
@@ -201,9 +200,8 @@ describe('Breadcrumb', () => {
     menu.dispatchEvent(new CustomEvent('forge-menu-select', { bubbles: true, composed: true, detail: { value: '/recent' } }));
 
     expect(spy).toHaveBeenCalledOnce();
-    const detail = spy.mock.calls[0][0].detail as IBreadcrumbsSelectEventData;
-    expect(detail.crumb).toEqual(crumbsWithSiblings[0].siblingRoutes![0]);
-    expect(detail.index).toBe(0);
+    const evt = spy.mock.calls[0][0] as Event;
+    expect((evt.target as BreadcrumbsItemComponent).index).toBe(0);
   });
 
   it('should show collapsed menu trigger when content overflows container width', async () => {

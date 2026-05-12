@@ -11,7 +11,7 @@ import '../../icon-button/icon-button.js';
 import '../../menu/menu.js';
 import '../../state-layer/state-layer.js';
 
-import type { ICrumbConfiguration, IBreadcrumbsSelectEventData } from '../breadcrumbs/breadcrumbs.js';
+import type { ICrumbConfiguration } from '../breadcrumbs/breadcrumbs.js';
 import type { IMenuOption } from '../../menu/menu-constants.js';
 
 import styles from './breadcrumbs-item.scss';
@@ -111,13 +111,7 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
   }
 
   #handleClick(): void {
-    this.dispatchEvent(
-      new CustomEvent<IBreadcrumbsSelectEventData>('forge-breadcrumbs-crumb-select', {
-        bubbles: true,
-        composed: true,
-        detail: { crumb: this.crumb, index: this.index }
-      })
-    );
+    this.dispatchEvent(new Event('forge-breadcrumbs-crumb-select', { bubbles: true, composed: true }));
   }
 
   #handleSiblingSelect(evt: CustomEvent): void {
@@ -125,13 +119,7 @@ export class BreadcrumbsItemComponent extends BaseLitElement {
     if (typeof value === 'string') {
       const siblingCrumb = this.crumb.siblingRoutes?.find(r => (r.path ?? r.label) === value);
       if (siblingCrumb) {
-        this.dispatchEvent(
-          new CustomEvent<IBreadcrumbsSelectEventData>('forge-breadcrumbs-crumb-select', {
-            bubbles: true,
-            composed: true,
-            detail: { crumb: siblingCrumb, index: this.index }
-          })
-        );
+        this.dispatchEvent(new Event('forge-breadcrumbs-crumb-select', { bubbles: true, composed: true }));
       }
     }
   }

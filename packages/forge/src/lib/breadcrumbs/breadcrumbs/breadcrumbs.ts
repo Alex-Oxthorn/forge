@@ -31,11 +31,6 @@ export interface ICrumbConfiguration {
   siblingRoutes?: ICrumbConfiguration[];
 }
 
-export interface IBreadcrumbsSelectEventData {
-  crumb: ICrumbConfiguration;
-  index: number;
-}
-
 /**
  * @tag forge-breadcrumbs
  *
@@ -65,7 +60,7 @@ export interface IBreadcrumbsSelectEventData {
  * @property {string} [siblingRoutesLabel='Sibling routes'] - The aria-label for the sibling routes trigger button within each crumb.
  * @attribute {string} [sibling-routes-label='Sibling routes'] - The aria-label for the sibling routes trigger button within each crumb.
  *
- * @fires {CustomEvent<IBreadcrumbsSelectEventData>} forge-breadcrumbs-crumb-select - Dispatched when a crumb is clicked.
+ * @fires {BreadcrumbsSelectEvent} forge-breadcrumbs-crumb-select - Dispatched when a crumb is clicked.
  * @fires {CustomEvent<void>} forge-breadcrumbs-home-click - Dispatched when the home button is clicked.
  */
 @customElement(BREADCRUMBS_TAG_NAME)
@@ -128,6 +123,12 @@ export class BreadcrumbsComponent extends BaseLitElement {
    */
   @property({ attribute: 'sibling-routes-label' })
   public siblingRoutesLabel = 'Sibling routes';
+
+  #selectedIndex = -1;
+
+  public get index(): number {
+    return this.#selectedIndex;
+  }
 
   @state()
   private _collapsed = false;
@@ -371,37 +372,19 @@ export class BreadcrumbsComponent extends BaseLitElement {
   #handleCollapsedSlotMenuSelect(evt: CustomEvent): void {
     const index = evt.detail?.value;
     if (typeof index === 'number' && index >= 0 && index < this.#slottedItems.length) {
-      const crumb = this.#slottedItems[index].crumb;
-      this.dispatchEvent(
-        new CustomEvent<IBreadcrumbsSelectEventData>('forge-breadcrumbs-crumb-select', {
-          bubbles: true,
-          composed: true,
-          detail: { crumb, index }
-        })
-      );
+      this.#slottedItems[index].dispatchEvent(new Event('forge-breadcrumbs-crumb-select', { bubbles: true, composed: true }));
     }
   }
 
   #handleHomeClick(): void {
-    this.dispatchEvent(
-      new CustomEvent<void>('forge-breadcrumbs-home-click', {
-        bubbles: true,
-        composed: true
-      })
-    );
+    this.dispatchEvent(new Event('forge-breadcrumbs-home-click', { bubbles: true, composed: true }));
   }
 
   #handleCollapsedMenuSelect(evt: CustomEvent): void {
     const index = evt.detail?.value;
     if (typeof index === 'number' && index >= 0 && index < this.crumbs.length) {
-      const crumb = this.crumbs[index];
-      this.dispatchEvent(
-        new CustomEvent<IBreadcrumbsSelectEventData>('forge-breadcrumbs-crumb-select', {
-          bubbles: true,
-          composed: true,
-          detail: { crumb, index }
-        })
-      );
+      this.#selectedIndex = index;
+      this.dispatchEvent(new Event('forge-breadcrumbs-crumb-select', { bubbles: true, composed: true }));
     }
   }
 
@@ -443,7 +426,7 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    'forge-breadcrumbs-crumb-select': CustomEvent<IBreadcrumbsSelectEventData>;
-    'forge-breadcrumbs-home-click': CustomEvent<void>;
+    'forge-breadcrumbs-crumb-select': Event;
+    'forge-breadcrumbs-home-click': Event;
   }
 }
